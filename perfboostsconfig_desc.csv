@@ -1,0 +1,20 @@
+0x40400000,POWER COLLAPSE
+0x40408000,LPM Bias
+0x40800000,CPUBOOST_MIN_FREQ BIG Core,/sys/module/msm_performance/parameters/cpu_min_freq
+0x40800100,CPUBOOST_MIN_FREQ LITTLE Core,/sys/module/msm_performance/parameters/cpu_min_freq
+0x40800200,CPUBOOST_MIN_FREQ BIG Core,/sys/module/msm_performance/parameters/cpu_min_freq
+0x40804000,CPUBOOST_MAX_FREQ BIG Core,/sys/module/msm_performance/parameters/cpu_max_freq
+0x40804100,CPUBOOST_MAX_FREQ LITTLE Core,/sys/module/msm_performance/parameters/cpu_max_freq
+0x40804200,CPUBOOST_MAX_FREQ PRIME Core,/sys/module/msm_performance/parameters/cpu_max_freq
+0x40C00000,SCHEDBOOST,/proc/sys/kernel/sched_boost
+0x40C1C000,SCHED UPMIGRATE,/proc/sys/kernel/sched_upmigrate
+0x40C1C200,SCHED UPMIGRATE PRIME,/proc/sys/kernel/sched_upmigrate
+0x40C20000,SCHED DOWNMIGRATE,/proc/sys/kernel/sched_downmigrate
+0x40C20200,SCHED DOWNMIGRATE PRIME,/proc/sys/kernel/sched_downmigrate
+0x40C54000,SCHED GROUP UPMIGRATE,/proc/sys/kernel/sched_group_upmigrate
+0x40C58000,SCHED GROUP DOWNMIGRATE,/proc/sys/kernel/sched_group_downmigrate
+0x41800000,CPUBW_MIN_FREQ
+0x4280C000,GPU MIN_FREQUENCY
+0x42C10000,STORAGE CLK SCALING
+0x43000000,LLCBW_MIN_FREQ
+0x43400000,L3_MEMLAT_MIN_FREQ
