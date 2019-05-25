@@ -18,6 +18,11 @@ apply_tune()
 {
     echo "Applying tuning..."
 
+    # keep sched_boost = 1 for 100ms when you are touching the screen
+	echo "0:0 4:0 7:0" > /sys/module/cpu_boost/parameters/input_boost_freq
+	echo 100 > /sys/module/cpu_boost/parameters/input_boost_ms
+	echo 1 > /sys/module/cpu_boost/parameters/sched_boost_on_input
+
     # higher sched_downmigrate to use little cluster more
 	lock_value "95 95" /proc/sys/kernel/sched_upmigrate
 	lock_value "90 85" /proc/sys/kernel/sched_downmigrate
@@ -25,7 +30,7 @@ apply_tune()
     # reserve more headroom for the app you are interacting with
     lock_value "10" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
-    
+
     # reserve 1 big core for top-app
     lock_value "0-5" /dev/cpuset/foreground/cpus
 
