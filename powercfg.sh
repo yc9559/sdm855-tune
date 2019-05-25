@@ -18,6 +18,9 @@ apply_tune()
 {
     echo "Applying tuning..."
 
+    # 640M for empty apps
+	echo "18432,23040,27648,51256,122880,150296" > /sys/module/lowmemorykiller/parameters/minfree
+
     # keep sched_boost = 1 for 100ms when you are touching the screen
 	echo "0:0 4:0 7:0" > /sys/module/cpu_boost/parameters/input_boost_freq
 	echo 100 > /sys/module/cpu_boost/parameters/input_boost_ms
