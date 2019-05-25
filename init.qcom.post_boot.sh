@@ -3923,7 +3923,7 @@ case "$target" in
     #endif VENDOR_EDIT
     #ifdef VENDOR_EDIT
     # Enable Adaptive LMK simon.ma@framework.perf change
-	echo "18432,23040,27648,51256,150296,200640" > /sys/module/lowmemorykiller/parameters/minfree
+	echo "18432,23040,27648,51256,122880,150296" > /sys/module/lowmemorykiller/parameters/minfree
     #endif VENDOR_EDIT
 	
 	#ifdef VENDOR_EDIT
