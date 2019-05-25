@@ -333,8 +333,8 @@ function configure_memplus_parameters() {
             if [ ! -f /data/vendor/swap/swapfile ]; then
                 #dd if=/dev/zero of=/data/vendor/swap/swapfile bs=1m count=2048
                 skip=0
-                count=2
-                while [ $skip -lt 1024 ];
+                count=128
+                while [ $skip -lt 16 ];
                 do
                     seek=$(($skip*$count))
                     ((skip++))
