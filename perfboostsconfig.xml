@@ -31,22 +31,34 @@
 
         <!-- Type="1", main launch boost of 2sec -->
         <Config
-            Id="0x00001081" Type="1" Enable="true" Timeout="2000" Target="msmnile"
+            Id="0x00001081" Type="1" Enable="true" Timeout="500" Target="msmnile"
             Resources="0x40C00000, 1, 
-                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
-                       0x40800000, 0xFFF, 0x40800100, 0xFFF, 0x40800200, 0xFFF, 
+                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 2700,
+                       0x40800000, 1800, 0x40800100, 0xFFF, 0x40800200, 1800, 
                        0x41800000, 0xFF,
                        0x40400000, 1, 
                        0x42C10000, 1, 
                        0x43000000, 0xFF, 
                        0x43400000, 0xFFFF" />
 
-    <!--app lauch boost (disabling packing)-->
+    <!--app lauch boost sustained-->
+        <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
+        <!-- CPUBW_MIN_FREQ resource opcode, value-->
+        <!-- POWER COLLAPSE resource opcode, value-->
+        <!-- STORAGE CLK SCALING resource opcode, value-->
+        <!-- LLCCBW resource opcode, value-->
 
         <!-- Type="2", launch boost for disable packing 1.5sec -->
         <Config
-            Id="0x00001081" Type="2" Enable="false" Timeout="1500" Target="msmnile"
-            Resources="" />
+            Id="0x00001081" Type="2" Enable="true" Timeout="2000" Target="msmnile"
+            Resources="
+                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 2600,
+                       0x41800000, 0xFF,
+                       0x40400000, 1, 
+                       0x42C10000, 1, 
+                       0x43000000, 0xFF" />
 
     <!-- config_enableLaunchBoostv2-->
         <!-- SCHEDBOOST resource opcode, value-->
@@ -100,6 +112,9 @@
 
     <!--Vertical Scroll boost-->
         <!-- LLCBW_MIN_FREQ resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ BIG CORE resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ PRIME CORE resource opcode, value -->
@@ -110,12 +125,16 @@
         <Config
             Id="0x00001080" Type="1" Enable="true" Target="msmnile"
             Resources="0x43000000, 25, 
-                       0x40800000, 1209, 0x40800100, 1000, 0x40800200, 1000,
+                       0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
+                       0x40800000, 1000, 0x40800100, 1500, 0x40800200, 0,
                        0x40C00000, 2, 
                        0x43400000, 8000" />
 
     <!--Prefling Scroll boost-->
         <!-- LLCBW_MIN_FREQ resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ BIG CORE resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ PRIME CORE resource opcode, value -->
@@ -126,7 +145,8 @@
         <Config
             Id="0x00001080" Type="4" Enable="true" Timeout="80" Target="msmnile"
             Resources="0x43000000, 25, 
-                       0x40800000, 1000, 0x40800100, 1000, 0x40800200, 1000,
+                       0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
+                       0x40800000, 1000, 0x40800100, 1500, 0x40800200, 0,
                        0x40C00000, 2, 
                        0x43400000, 8000" />
 
@@ -154,6 +174,9 @@
 
     <!--Drag boost-->
         <!-- LLCBW_MIN_FREQ resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
+        <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ BIG CORE resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ PRIME CORE resource opcode, value -->
@@ -163,8 +186,9 @@
         <!-- Type="1", Drag boost -->
         <Config
             Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
-            Resources="0x43000000, 17, 
-                       0x40800000, 1000, 0x40800100, 1000, 0x40800200, 1000,
+            Resources="0x43000000, 25, 
+                       0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
+                       0x40800000, 1200, 0x40800100, 1500, 0x40800200, 0,
                        0x40C00000, 2, 
                        0x43400000, 8000" />
 
@@ -182,7 +206,7 @@
             Id="0x00001088" Enable="true" Target="msmnile"
             Resources="0x40C00000, 1, 
                        0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
-                       0x40800000,0xFFF, 0x40800100,0xFFF, 0x40800200,0xFFF" />
+                       0x40800000, 0xFFF, 0x40800100, 0xFFF, 0x40800200, 0xFFF" />
 
     <!--Rotation latency boost-->
         <!-- SCHEDBOOST resource opcode, value-->
@@ -197,8 +221,8 @@
         <Config
             Id="0x00001089" Enable="true" Timeout="1500" Target="msmnile"
             Resources="0x40C00000, 0x1, 
-                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
-                       0x40800000,0xFFF, 0x40800100,0xFFF, 0x40800200,0xFFF" />
+                       0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
+                       0x40800000, 2000, 0x40800100, 0xFFF, 0x40800200, 2400" />
 
     <!--Rotation animation boost-->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value-->
@@ -207,7 +231,7 @@
 
         <Config
             Id="0x00001090" Enable="true" Timeout="1000" Target="msmnile"
-            Resources="0x40800100, 1000, 
+            Resources="0x40800100, 1500, 
                        0x4280C000, 596" />
     </PerfBoost>
 </BoostConfigs>
