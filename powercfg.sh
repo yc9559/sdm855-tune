@@ -30,6 +30,11 @@ apply_tune()
 	lock_value "95 95" /proc/sys/kernel/sched_upmigrate
 	lock_value "90 85" /proc/sys/kernel/sched_downmigrate
 
+    # turn off foreground's sched_boost_enabled
+    lock_value "0" /dev/stune/foreground/schedtune.sched_boost_enabled
+    lock_value "0" /dev/stune/foreground/schedtune.boost
+    lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
+
     # reserve more headroom for the app you are interacting with
     lock_value "10" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
