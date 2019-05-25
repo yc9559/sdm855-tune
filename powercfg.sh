@@ -2,7 +2,7 @@
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
-# Generated at: 2019-05-24
+# Generated at: 2019-05-25
 
 # $1:value $2:file path
 lock_value() 
@@ -17,7 +17,18 @@ lock_value()
 apply_tune()
 {
     echo "Applying tuning..."
+
+    # higher sched_downmigrate to use little cluster more
+	lock_value "95 95" /proc/sys/kernel/sched_upmigrate
+	lock_value "90 85" /proc/sys/kernel/sched_downmigrate
+
+    # reserve more headroom for the app you are interacting with
+    lock_value "10" /dev/stune/top-app/schedtune.boost
+    lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
     
+    # reserve 1 big core for top-app
+    lock_value "0-5" /dev/cpuset/foreground/cpus
+
     echo "Applying tuning done."
 }
 
