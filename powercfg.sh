@@ -18,13 +18,13 @@ apply_tune()
 {
     echo "Applying tuning..."
 
-    # 640M for empty apps
-	echo "18432,23040,27648,51256,122880,150296" > /sys/module/lowmemorykiller/parameters/minfree
+    # 580M for empty apps
+	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
     # keep sched_boost = 1 for 100ms when you are touching the screen
-	echo "0:0 4:0 7:0" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo 100 > /sys/module/cpu_boost/parameters/input_boost_ms
-	echo 1 > /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 1 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # higher sched_downmigrate to use little cluster more
 	lock_value "95 95" /proc/sys/kernel/sched_upmigrate
