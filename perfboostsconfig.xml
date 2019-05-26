@@ -147,7 +147,7 @@
         <!-- TIMEOUT 80ms -->
         <!-- Type="4", Prefling boost -->
         <Config
-            Id="0x00001080" Type="4" Enable="true" Timeout="80" Target="msmnile"
+            Id="0x00001080" Type="4" Enable="false" Timeout="80" Target="msmnile"
             Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
                        0x40800000, 1200, 0x40800100, 1600, 0x40800200, 0,
                        0x40C00000, 2, 
