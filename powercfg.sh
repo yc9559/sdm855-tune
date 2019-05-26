@@ -26,8 +26,9 @@ apply_tune()
 	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 1 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
+    # 1632 / 1785 = 91.4
+	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
     # higher sched_downmigrate to use little cluster more
-	lock_value "95 95" /proc/sys/kernel/sched_upmigrate
 	lock_value "90 85" /proc/sys/kernel/sched_downmigrate
 
     # turn off foreground's sched_boost_enabled
