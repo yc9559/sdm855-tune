@@ -21,10 +21,10 @@ apply_tune()
     # 580M for empty apps
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # sched_set_boost(1) for 80ms when you are touching the screen
-	lock_value "0:0 4:1056000 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 1 /sys/module/cpu_boost/parameters/sched_boost_on_input
+    # 700ms cpu0@1.5g is better than setting sched_set_boost(1) for 80ms when you are touching the screen
+	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 700 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1632 / 1785 = 91.4
 	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
