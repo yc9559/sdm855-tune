@@ -40,9 +40,6 @@ apply_tune()
     lock_value "10" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
 
-    # reserve 1 big core for top-app
-    lock_value "0-5" /dev/cpuset/foreground/cpus
-
     echo "Applying tuning done."
 }
 
