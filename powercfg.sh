@@ -31,6 +31,10 @@ apply_tune()
     # higher sched_downmigrate to use little cluster more
 	lock_value "90 85" /proc/sys/kernel/sched_downmigrate
 
+    # prevent render thread running on cpu0
+    lock_value "1-3" /dev/cpuset/background/cpus
+    lock_value "1-6" /dev/cpuset/foreground/cpus
+
     # turn off foreground's sched_boost_enabled
     lock_value "0" /dev/stune/foreground/schedtune.sched_boost_enabled
     lock_value "0" /dev/stune/foreground/schedtune.boost
