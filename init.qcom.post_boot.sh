@@ -3852,7 +3852,7 @@ case "$target" in
 	echo 32768 > /proc/sys/vm/min_free_kbytes
 
 	# Core control parameters for gold
-	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
 	echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
