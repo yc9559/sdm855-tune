@@ -21,27 +21,33 @@ apply_tune()
     # 580M for empty apps
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # setting sched_set_boost(3) for 700ms when you are touching the screen
-    # without setting min_freq, because CONSERVATIVE_BOOST = 3 is good enough
-	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    # power cruve of 576-1209 is almost linear
+	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value 700 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 3 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
-    # 1632 / 1785 = 91.4
-	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
+    # 1708 / 1785 = 95.6
+	lock_value "96 95" /proc/sys/kernel/sched_upmigrate
     # higher sched_downmigrate to use little cluster more
-	lock_value "90 85" /proc/sys/kernel/sched_downmigrate
+	lock_value "96 85" /proc/sys/kernel/sched_downmigrate
 
     # prevent render thread running on cpu0
     lock_value "1-3" /dev/cpuset/background/cpus
     lock_value "1-6" /dev/cpuset/foreground/cpus
 
-    # turn off foreground's sched_boost_enabled
-    lock_value "0" /dev/stune/foreground/schedtune.sched_boost_enabled
+    # always limit background task
+    lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
+    lock_value "0" /dev/stune/background/schedtune.sched_boost_no_override
+    lock_value "0" /dev/stune/background/schedtune.boost
+    lock_value "0" /dev/stune/background/schedtune.prefer_idle
+    # limit foreground task
+    lock_value "1" /dev/stune/foreground/schedtune.sched_boost_enabled
+    lock_value "0" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
-
     # reserve more headroom for the app you are interacting with
+    lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
+    lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
     lock_value "5" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
 
