@@ -21,10 +21,11 @@ apply_tune()
     # 580M for empty apps
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # 700ms cpu0@1.5g is better than setting sched_set_boost(1) for 80ms when you are touching the screen
-	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    # setting sched_set_boost(3) for 700ms when you are touching the screen
+    # without setting min_freq, because CONSERVATIVE_BOOST = 3 is good enough
+	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value 700 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value 3 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1632 / 1785 = 91.4
 	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
@@ -44,16 +45,16 @@ apply_tune()
     lock_value "5" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
 
-    # 0 -> 125% for A55
+    # 0 -> 125% for A55, target_load = 80
     lock_value "0" /sys/devices/system/cpu/cpu0/sched_load_boost
     lock_value "0" /sys/devices/system/cpu/cpu1/sched_load_boost
     lock_value "0" /sys/devices/system/cpu/cpu2/sched_load_boost
     lock_value "0" /sys/devices/system/cpu/cpu3/sched_load_boost
-    # -5 -> 118.75% for A76
-    lock_value "-5" /sys/devices/system/cpu/cpu4/sched_load_boost
-    lock_value "-5" /sys/devices/system/cpu/cpu5/sched_load_boost
-    lock_value "-5" /sys/devices/system/cpu/cpu6/sched_load_boost
-    # -10 -> 112.5% for A76 prime
+    # -6 -> 117.5% for A76, target_load = 85
+    lock_value "-6" /sys/devices/system/cpu/cpu4/sched_load_boost
+    lock_value "-6" /sys/devices/system/cpu/cpu5/sched_load_boost
+    lock_value "-6" /sys/devices/system/cpu/cpu6/sched_load_boost
+    # -10 -> 112.5% for A76 prime, target_load = 88
     lock_value "-10" /sys/devices/system/cpu/cpu7/sched_load_boost
 
     echo "Applying tuning done."
