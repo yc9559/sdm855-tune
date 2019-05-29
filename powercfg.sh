@@ -41,8 +41,20 @@ apply_tune()
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
 
     # reserve more headroom for the app you are interacting with
-    lock_value "10" /dev/stune/top-app/schedtune.boost
+    lock_value "5" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
+
+    # 0 -> 125% for A55
+    lock_value "0" /sys/devices/system/cpu/cpu0/sched_load_boost
+    lock_value "0" /sys/devices/system/cpu/cpu1/sched_load_boost
+    lock_value "0" /sys/devices/system/cpu/cpu2/sched_load_boost
+    lock_value "0" /sys/devices/system/cpu/cpu3/sched_load_boost
+    # -5 -> 118.75% for A76
+    lock_value "-5" /sys/devices/system/cpu/cpu4/sched_load_boost
+    lock_value "-5" /sys/devices/system/cpu/cpu5/sched_load_boost
+    lock_value "-5" /sys/devices/system/cpu/cpu6/sched_load_boost
+    # -10 -> 112.5% for A76 prime
+    lock_value "-10" /sys/devices/system/cpu/cpu7/sched_load_boost
 
     echo "Applying tuning done."
 }
