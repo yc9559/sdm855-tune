@@ -45,10 +45,10 @@ apply_tune()
     lock_value "0" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
-    # reserve more headroom for the app you are interacting with
+    # "boost" effect on ArkNight(CPU0 frequency used most): 0->1036, 1->1113, 5->1305
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
-    lock_value "5" /dev/stune/top-app/schedtune.boost
+    lock_value "1" /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
 
     # 0 -> 125% for A55, target_load = 80
