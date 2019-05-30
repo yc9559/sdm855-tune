@@ -63,6 +63,19 @@ apply_tune()
     # -10 -> 112.5% for A76 prime, target_load = 88
     lock_value "-10" /sys/devices/system/cpu/cpu7/sched_load_boost
 
+    # CFQ io scheduler takes cgroup into consideration
+    lock_value "cfq" /sys/block/sda/queue/scheduler
+    # 32K means read more 32K data(starting at 0x0) when reading at 0x0, lower overhead on random iop
+    lock_value "32" /sys/block/sda/queue/read_ahead_kb
+    # Flash doesn't have back seek problem, so penalty is as low as possible
+    lock_value "1" /sys/block/sda/queue/iosched/back_seek_penalty
+    # slice_idle = 0 means CFQ IOP mode, https://lore.kernel.org/patchwork/patch/944972/
+    lock_value "0" /sys/block/sda/queue/iosched/slice_idle
+    # UFS 2.0+ hardware queue depth is 32
+    lock_value "32" /sys/block/sda/queue/iosched/quantum
+    # Lower than default value "8"
+    lock_value "4" /sys/block/sda/queue/iosched/group_idle
+
     echo "Applying tuning done."
 }
 
