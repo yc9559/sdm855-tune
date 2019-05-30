@@ -23,7 +23,7 @@ apply_tune()
 
     # power cruve of 576-1209 is almost linear
 	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 700 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1708 / 1785 = 95.6
