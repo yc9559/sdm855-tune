@@ -23,7 +23,7 @@ apply_tune()
 
     # power cruve of 576-1209 is almost linear
 	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1708 / 1785 = 95.6
@@ -32,7 +32,7 @@ apply_tune()
 	lock_value "96 85" /proc/sys/kernel/sched_downmigrate
 
     # prevent render thread running on cpu0
-    lock_value "1-3" /dev/cpuset/background/cpus
+    lock_value "0-3" /dev/cpuset/background/cpus
     lock_value "1-6" /dev/cpuset/foreground/cpus
 
     # always limit background task
