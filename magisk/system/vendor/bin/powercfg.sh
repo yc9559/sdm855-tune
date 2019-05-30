@@ -40,10 +40,10 @@ apply_tune()
     lock_value "0" /dev/stune/background/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/background/schedtune.boost
     lock_value "0" /dev/stune/background/schedtune.prefer_idle
-    # limit foreground task
+    # limit sched_boost override on foreground task
     lock_value "1" /dev/stune/foreground/schedtune.sched_boost_enabled
     lock_value "0" /dev/stune/foreground/schedtune.sched_boost_no_override
-    lock_value "0" /dev/stune/foreground/schedtune.boost
+    lock_value "1" /dev/stune/foreground/schedtune.boost
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
     # "boost" effect on ArkNight(CPU0 frequency used most): 0->1036, 1->1113, 5->1305
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
