@@ -2,7 +2,7 @@
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
-# Version: 20190529
+# Version: 20190603
 
 # $1:value $2:file path
 lock_value() 
@@ -48,7 +48,7 @@ apply_tune()
     # "boost" effect on ArkNight(CPU0 frequency used most): 0->1036, 1->1113, 5->1305
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
-    lock_value "1" /dev/stune/top-app/schedtune.boost
+    # /dev/stune/top-app/schedtune.boost is controlled by libqti-perfd-client.so
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
 
     # 0 -> 125% for A55, target_load = 80
@@ -60,8 +60,8 @@ apply_tune()
     lock_value "-6" /sys/devices/system/cpu/cpu4/sched_load_boost
     lock_value "-6" /sys/devices/system/cpu/cpu5/sched_load_boost
     lock_value "-6" /sys/devices/system/cpu/cpu6/sched_load_boost
-    # -10 -> 112.5% for A76 prime, target_load = 88
-    lock_value "-10" /sys/devices/system/cpu/cpu7/sched_load_boost
+    # -6 -> 117.5% for A76 prime, target_load = 85
+    lock_value "-6" /sys/devices/system/cpu/cpu7/sched_load_boost
 
     # CFQ io scheduler takes cgroup into consideration
     lock_value "cfq" /sys/block/sda/queue/scheduler

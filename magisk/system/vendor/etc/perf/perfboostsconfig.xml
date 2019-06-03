@@ -119,6 +119,7 @@
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ PRIME CORE resource opcode, value -->
         <!-- SCHEDBOOST resource opcode, value-->
+        <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- LLCCBW resource opcode, value-->
         <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
@@ -126,9 +127,10 @@
         <!-- Type="1", Vertical Scroll boost -->
         <Config
             Id="0x00001080" Type="1" Enable="true" Target="msmnile"
-            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
-                       0x40800000, 1100, 0x40800100, 1500, 0x40800200, 0,
+            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
+                       0x40800000, 0, 0x40800100, 1000, 0x40800200, 0,
                        0x40C00000, 0, 
+                       0x40C5C000, 10, 
                        0x41800000, 80, 
                        0x43000000, 58, 
                        0x43400000, 8000" />
@@ -185,6 +187,7 @@
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value -->
         <!-- CPUBOOST_MIN_FREQ PRIME CORE resource opcode, value -->
         <!-- SCHEDBOOST resource opcode, value-->
+        <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- LLCCBW resource opcode, value-->
         <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
@@ -192,9 +195,10 @@
         <!-- Type="1", Drag boost -->
         <Config
             Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
-            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
-                       0x40800000, 1100, 0x40800100, 1500, 0x40800200, 0,
+            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
+                       0x40800000, 0, 0x40800100, 1000, 0x40800200, 0,
                        0x40C00000, 0, 
+                       0x40C5C000, 10, 
                        0x41800000, 80, 
                        0x43000000, 58, 
                        0x43400000, 8000" />
