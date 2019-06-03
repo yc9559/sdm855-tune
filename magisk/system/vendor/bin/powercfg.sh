@@ -48,7 +48,8 @@ apply_tune()
     # "boost" effect on ArkNight(CPU0 frequency used most): 0->1036, 1->1113, 5->1305
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
-    # /dev/stune/top-app/schedtune.boost is controlled by libqti-perfd-client.so
+    # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "1" > /dev/stune/top-app/schedtune.boost
     lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
 
     # 0 -> 125% for A55, target_load = 80
@@ -75,6 +76,11 @@ apply_tune()
     lock_value "32" /sys/block/sda/queue/iosched/quantum
     # Lower than default value "8"
     lock_value "4" /sys/block/sda/queue/iosched/group_idle
+
+    # turn off hotplug to reduce latency
+ 	lock_value 0 /sys/devices/system/cpu/cpu0/core_ctl/enable
+	lock_value 0 /sys/devices/system/cpu/cpu4/core_ctl/enable
+	lock_value 0 /sys/devices/system/cpu/cpu7/core_ctl/enable
 
     echo "Applying tuning done."
 }

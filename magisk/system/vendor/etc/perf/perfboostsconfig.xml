@@ -43,6 +43,7 @@
 
     <!--app lauch boost sustained-->
         <!-- SCHEDBOOST resource opcode, value-->
+        <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
@@ -55,6 +56,7 @@
         <Config
             Id="0x00001081" Type="2" Enable="true" Timeout="2000" Target="msmnile"
             Resources="0x40C00000, 1, 
+                       0x40C5C000, 20, 
                        0x40804000, 2200, 0x40804100, 0xFFF, 0x40804200, 2600,
                        0x41800000, 0xFF,
                        0x40400000, 1, 
