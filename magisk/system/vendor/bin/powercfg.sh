@@ -33,7 +33,8 @@ apply_tune()
 
     # prevent render thread running on cpu0
     lock_value "0-3" /dev/cpuset/background/cpus
-    lock_value "1-6" /dev/cpuset/foreground/cpus
+    lock_value "0-6" /dev/cpuset/foreground/cpus
+    lock_value "1-7" /dev/cpuset/top-app/cpus
 
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
@@ -43,14 +44,14 @@ apply_tune()
     # limit sched_boost override on foreground task
     lock_value "1" /dev/stune/foreground/schedtune.sched_boost_enabled
     lock_value "0" /dev/stune/foreground/schedtune.sched_boost_no_override
-    lock_value "1" /dev/stune/foreground/schedtune.boost
+    lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
     # "boost" effect on ArkNight(CPU0 frequency used most): 0->1036, 1->1113, 5->1305
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
-    echo "1" > /dev/stune/top-app/schedtune.boost
-    lock_value "1" /dev/stune/top-app/schedtune.prefer_idle
+    echo "0" > /dev/stune/top-app/schedtune.boost
+    echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
     # 0 -> 125% for A55, target_load = 80
     lock_value "0" /sys/devices/system/cpu/cpu0/sched_load_boost
@@ -78,9 +79,14 @@ apply_tune()
     lock_value "4" /sys/block/sda/queue/iosched/group_idle
 
     # turn off hotplug to reduce latency
- 	lock_value 0 /sys/devices/system/cpu/cpu0/core_ctl/enable
-	lock_value 0 /sys/devices/system/cpu/cpu4/core_ctl/enable
-	lock_value 0 /sys/devices/system/cpu/cpu7/core_ctl/enable
+    lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
+    lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
+    # task usually doesn't run on cpu7
+    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+
+    # reduce latency of reaching sched_upmigrate, libqti-perfd-client.so will override it
+    echo "1555200" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq
+    echo "95" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
 
     echo "Applying tuning done."
 }
