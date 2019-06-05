@@ -23,7 +23,7 @@ apply_tune()
 
     # power cruve of 576-1209 is almost linear
 	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1708 / 1785 = 95.6
@@ -85,8 +85,12 @@ apply_tune()
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
 
     # reduce latency of reaching sched_upmigrate, libqti-perfd-client.so will override it
-    # echo "1555200" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq
-    # echo "95" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
+    echo "1209600" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+    echo "90" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_load
+    echo "1401600" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
+    echo "90" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_load
+
+    echo 0 > /sys/block/zram0/queue/read_ahead_kb
 
     echo "Applying tuning done."
 }

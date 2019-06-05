@@ -56,7 +56,7 @@
         <Config
             Id="0x00001081" Type="2" Enable="true" Timeout="2000" Target="msmnile"
             Resources="0x40C00000, 1, 
-                       0x40C5C000, 20, 
+                       0x40C18000, 20, 
                        0x40804000, 2200, 0x40804100, 0xFFF, 0x40804200, 2600,
                        0x41800000, 0xFF,
                        0x40400000, 1, 
@@ -123,6 +123,7 @@
         <!-- SCHEDBOOST resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CPU0_HISPEED_LOAD resource opcode, value-->
+        <!-- CPU4_HISPEED_LOAD resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- LLCCBW resource opcode, value-->
         <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
@@ -130,11 +131,12 @@
         <!-- Type="1", Vertical Scroll boost -->
         <Config
             Id="0x00001080" Type="1" Enable="true" Target="msmnile"
-            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
+            Resources="0x40804000, 1800, 0x40804100, 0xFFF, 0x40804200, 2000,
                        0x40800000, 0, 0x40800100, 0, 0x40800200, 0,
                        0x40C00000, 0, 
-                       0x40C5C000, 15, 
-                       0x40C64000, 30, 
+                       0x40C18000, 10, 
+                       0x40C5C000, 30, 
+                       0x40C64000, 25, 
                        0x41800000, 80, 
                        0x43000000, 58, 
                        0x43400000, 8000" />
@@ -193,6 +195,7 @@
         <!-- SCHEDBOOST resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CPU0_HISPEED_LOAD resource opcode, value-->
+        <!-- CPU4_HISPEED_LOAD resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- LLCCBW resource opcode, value-->
         <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
@@ -200,11 +203,12 @@
         <!-- Type="1", Drag boost -->
         <Config
             Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
-            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
+            Resources="0x40804000, 1800, 0x40804100, 0xFFF, 0x40804200, 2000,
                        0x40800000, 0, 0x40800100, 0, 0x40800200, 0,
                        0x40C00000, 0, 
-                       0x40C5C000, 15, 
-                       0x40C64000, 30, 
+                       0x40C18000, 10, 
+                       0x40C5C000, 30, 
+                       0x40C64000, 25, 
                        0x41800000, 80, 
                        0x43000000, 58, 
                        0x43400000, 8000" />
