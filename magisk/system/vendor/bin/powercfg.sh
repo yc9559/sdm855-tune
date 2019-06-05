@@ -85,8 +85,8 @@ apply_tune()
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
 
     # reduce latency of reaching sched_upmigrate, libqti-perfd-client.so will override it
-    echo "1555200" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq
-    echo "95" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
+    # echo "1555200" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq
+    # echo "95" > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_load
 
     echo "Applying tuning done."
 }
