@@ -26,15 +26,15 @@ apply_tune()
 	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
-    # 1708 / 1785 = 95.6
-	lock_value "96 95" /proc/sys/kernel/sched_upmigrate
+    # 1708 * 0.95 / 1785 = 90.9
+	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
     # higher sched_downmigrate to use little cluster more
-	lock_value "96 85" /proc/sys/kernel/sched_downmigrate
+	lock_value "91 85" /proc/sys/kernel/sched_downmigrate
 
     # prevent render thread running on cpu0
     lock_value "0-3" /dev/cpuset/background/cpus
-    lock_value "0-6" /dev/cpuset/foreground/cpus
-    lock_value "1-7" /dev/cpuset/top-app/cpus
+    lock_value "1-6" /dev/cpuset/foreground/cpus
+    lock_value "0-7" /dev/cpuset/top-app/cpus
 
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
@@ -80,15 +80,24 @@ apply_tune()
 
     # turn off hotplug to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
-    lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
+    # limit the usage of big cluster
+    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo 25 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+	echo 10 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+	echo 40 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+	echo 20 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+	echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 
     # reduce latency of reaching sched_upmigrate, libqti-perfd-client.so will override it
-    echo "1209600" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-    echo "90" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_load
-    echo "1401600" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-    echo "90" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_load
+    # echo "1209600" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+    # echo "90" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_load
+    # echo "1401600" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
+    # echo "90" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_load
 
     echo 0 > /sys/block/zram0/queue/read_ahead_kb
 
