@@ -51,7 +51,7 @@ int main()
             c1.seekg(c1.beg);
             c2.seekg(c2.beg);
         }
-        for (unsigned int t = 0; t < UINT32_MAX; t++);
+        for (unsigned int t = 0; t < 10000; t++);
         prev = now;
     }
 
