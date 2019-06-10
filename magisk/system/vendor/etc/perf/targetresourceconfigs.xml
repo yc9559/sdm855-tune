@@ -30,6 +30,7 @@ as anyway perflock calls of these resources would fail. -->
         <Config MajorValue="0x3" MinorValue="0x6" Supported="no" /> <!-- sched_init_task_load -->
         <Config MajorValue="0x3" MinorValue="0x6" Target="msmnile" Kernel="4.14" Supported="yes" Node="/dev/stune/top-app/schedtune.boost" />
         <Config MajorValue="0x3" MinorValue="0xB" Supported="no" /> <!-- sched_spill_nr_run -->
+        <Config MajorValue="0x3" MinorValue="0xB" Target="msmnile" Kernel="4.14" Supported="yes" Node="/sys/devices/system/cpu/cpu4/core_ctl/min_cpus" />
         <Config MajorValue="0x3" MinorValue="0xC" Supported="no" /> <!-- sched_static_cpu_pwr_cost -->
         <Config MajorValue="0x3" MinorValue="0xD" Supported="no" /> <!-- sched_restrict_cluster_spill -->
         <Config MajorValue="0x3" MinorValue="0x13" Supported="no" /> <!-- sched_set_freq_aggr -->
