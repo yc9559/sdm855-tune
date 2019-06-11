@@ -22,14 +22,18 @@ apply_tune()
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
     # power cruve of 576-1209 is almost linear
-	lock_value "0:1555200 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 100 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 0 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1708 * 0.95 / 1785 = 90.9
 	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
     # higher sched_downmigrate to use little cluster more
 	lock_value "91 85" /proc/sys/kernel/sched_downmigrate
+
+    # if task_util >= (100 / 1024 * 20ms), the task will be boosted
+    lock_value 100 /proc/sys/kernel/sched_min_task_util_for_boost
+    lock_value 50 /proc/sys/kernel/sched_min_task_util_for_colocation
 
     # prevent render thread running on cpu0
     lock_value "0-3" /dev/cpuset/background/cpus
@@ -83,14 +87,14 @@ apply_tune()
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
 	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-	echo 10 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+	echo "30 10 10" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+	echo "10 3 3" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
 	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 	echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
-	echo 10 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+	echo 3 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 
     # reduce latency of reaching sched_upmigrate, libqti-perfd-client.so will override it
