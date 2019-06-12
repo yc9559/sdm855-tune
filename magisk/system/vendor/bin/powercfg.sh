@@ -31,9 +31,11 @@ apply_tune()
     # higher sched_downmigrate to use little cluster more
 	lock_value "91 85" /proc/sys/kernel/sched_downmigrate
 
-    # if task_util >= (100 / 1024 * 20ms), the task will be boosted
-    lock_value 100 /proc/sys/kernel/sched_min_task_util_for_boost
-    lock_value 50 /proc/sys/kernel/sched_min_task_util_for_colocation
+    # if task_util >= (100 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
+    lock_value 24 /proc/sys/kernel/sched_min_task_util_for_boost
+    # turn off normal colocation boost
+    lock_value 1000 /proc/sys/kernel/sched_min_task_util_for_colocation
+    lock_value 2000000 /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
 
     # prevent render thread running on cpu0
     lock_value "0-3" /dev/cpuset/background/cpus
