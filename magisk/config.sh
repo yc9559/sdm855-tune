@@ -124,7 +124,7 @@ print_modname() {
   ui_print "sdm855-tune https://github.com/yc9559/sdm855-tune/"
   ui_print "Author: Matt Yang"
   ui_print "Platform: sdm855"
-  ui_print "Version: 20190606"
+  ui_print "Version: 20190612"
 }
 
 # Copy/extract your module files into $MODPATH in on_install.

@@ -2,7 +2,7 @@
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
-# Version: 20190606
+# Version: 20190612
 
 # $1:value $2:file path
 lock_value() 
