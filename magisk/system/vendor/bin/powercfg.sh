@@ -87,8 +87,8 @@ apply_tune()
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
 	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo "30 10 10" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-	echo "10 3 3" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+	echo 10 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
