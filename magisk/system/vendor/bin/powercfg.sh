@@ -31,16 +31,16 @@ apply_tune()
     # higher sched_downmigrate to use little cluster more
 	lock_value "91 85" /proc/sys/kernel/sched_downmigrate
 
-    # if task_util >= (100 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
-    lock_value 24 /proc/sys/kernel/sched_min_task_util_for_boost
-    # turn off normal colocation boost
-    lock_value 1000 /proc/sys/kernel/sched_min_task_util_for_colocation
-    lock_value 2000000 /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
-
-    # prevent render thread running on cpu0
-    lock_value "0-3" /dev/cpuset/background/cpus
-    lock_value "1-6" /dev/cpuset/foreground/cpus
-    lock_value "0-7" /dev/cpuset/top-app/cpus
+    # if task_util >= (16 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
+    lock_value 16 /proc/sys/kernel/sched_min_task_util_for_boost
+    # bigger normal colocation boost threshold
+    lock_value 512 /proc/sys/kernel/sched_min_task_util_for_colocation
+    lock_value 1700000 /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+  
+    # limit foreground cpu usage
+    # lock_value "0-3" /dev/cpuset/background/cpus
+    # lock_value "1-6" /dev/cpuset/foreground/cpus
+    # lock_value "0-7" /dev/cpuset/top-app/cpus
 
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
@@ -105,7 +105,8 @@ apply_tune()
     # echo "1401600" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
     # echo "90" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_load
 
-    echo 0 > /sys/block/zram0/queue/read_ahead_kb
+    # zram doesn't need much read ahead(random read)
+    echo 4 > /sys/block/zram0/queue/read_ahead_kb
 
     echo "Applying tuning done."
 }
