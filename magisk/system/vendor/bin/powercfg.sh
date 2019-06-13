@@ -60,16 +60,16 @@ apply_tune()
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
     # 0 -> 125% for A55, target_load = 80
-    lock_value "0" /sys/devices/system/cpu/cpu0/sched_load_boost
-    lock_value "0" /sys/devices/system/cpu/cpu1/sched_load_boost
-    lock_value "0" /sys/devices/system/cpu/cpu2/sched_load_boost
-    lock_value "0" /sys/devices/system/cpu/cpu3/sched_load_boost
+    # lock_value "0" /sys/devices/system/cpu/cpu0/sched_load_boost
+    # lock_value "0" /sys/devices/system/cpu/cpu1/sched_load_boost
+    # lock_value "0" /sys/devices/system/cpu/cpu2/sched_load_boost
+    # lock_value "0" /sys/devices/system/cpu/cpu3/sched_load_boost
     # -6 -> 117.5% for A76, target_load = 85
-    lock_value "-6" /sys/devices/system/cpu/cpu4/sched_load_boost
-    lock_value "-6" /sys/devices/system/cpu/cpu5/sched_load_boost
-    lock_value "-6" /sys/devices/system/cpu/cpu6/sched_load_boost
+    # lock_value "-6" /sys/devices/system/cpu/cpu4/sched_load_boost
+    # lock_value "-6" /sys/devices/system/cpu/cpu5/sched_load_boost
+    # lock_value "-6" /sys/devices/system/cpu/cpu6/sched_load_boost
     # -6 -> 117.5% for A76 prime, target_load = 85
-    lock_value "-6" /sys/devices/system/cpu/cpu7/sched_load_boost
+    # lock_value "-6" /sys/devices/system/cpu/cpu7/sched_load_boost
 
     # CFQ io scheduler takes cgroup into consideration
     lock_value "cfq" /sys/block/sda/queue/scheduler
