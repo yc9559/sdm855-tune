@@ -67,9 +67,7 @@ apply_common()
     # slice_idle = 0 means CFQ IOP mode, https://lore.kernel.org/patchwork/patch/944972/
     lock_value "0" /sys/block/sda/queue/iosched/slice_idle
     # UFS 2.0+ hardware queue depth is 32
-    lock_value "32" /sys/block/sda/queue/iosched/quantum
-    # Lower than default value "8"
-    lock_value "4" /sys/block/sda/queue/iosched/group_idle
+    lock_value "16" /sys/block/sda/queue/iosched/quantum
 
     # turn off hotplug to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
