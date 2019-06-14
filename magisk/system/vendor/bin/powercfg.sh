@@ -4,6 +4,8 @@
 # Platform: sdm855
 # Version: 20190612
 
+module_dir="/data/adb/modules/sdm855-tune"
+
 # $1:value $2:file path
 lock_value() 
 {
@@ -18,7 +20,7 @@ lock_value()
 update_qti_perfd_cfg()
 {
     stop perf-hal-1-0
-    cp /data/adb/modules/sdm855-tune/system/vendor/etc/perf/perfd_profiles/${1}/* /data/adb/modules/sdm855-tune/system/vendor/etc/perf/
+    cp ${module_dir}/system/vendor/etc/perf/perfd_profiles/${1}/* ${module_dir}/system/vendor/etc/perf/
     start perf-hal-1-0
 }
 
@@ -89,12 +91,12 @@ apply_common()
 
 apply_powersave()
 {
-    # same as default
-    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    # 0.3-1.7, 0.7-1.6, 0.8-2.0, boost: 2.0+2.4
+    echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
-	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
@@ -110,7 +112,7 @@ apply_powersave()
 
 apply_balance()
 {
-    # same as default
+    # 0.5-1.7, 0.7-2.0, 0.8-2.4, boost: 2.3+2.7
     echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
@@ -131,18 +133,18 @@ apply_balance()
 
 apply_performance()
 {
-    # same as default
+    # 0.5-1.7, 0.7-2.4, 0.8-2.8, boost: 2.4+2.8
     echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
-    # limit the usage of big cluster
-    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # turn off core_ctl to reduce latency
+    lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
 	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
@@ -152,21 +154,21 @@ apply_performance()
 
 apply_fast()
 {
-    # same as default
-    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    # 1.0-1.7, 1.6-2.0, 1.6-2.6, boost: 2.4+2.8
+    echo 1036800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo 1612800 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo 1612800 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
-	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
-    # limit the usage of big cluster
-    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-    # task usually doesn't run on cpu7
-    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    # turn off core_ctl to reduce latency
+    lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # turn off core_ctl to reduce latency
+    lock_value "0" /sys/devices/system/cpu/cpu7/core_ctl/enable
+	echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 
     update_qti_perfd_cfg fast
 }

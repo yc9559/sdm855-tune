@@ -34,7 +34,7 @@
         <Config
             Id="0x00001081" Type="1" Enable="true" Timeout="400" Target="msmnile"
             Resources="0x40C00000, 1, 
-                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 2700,
+                       0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
                        0x40800000, 1800, 0x40800100, 0xFFF, 0x40800200, 1800, 
                        0x40C2C000, 3, 
                        0x41800000, 0xFF,
@@ -59,7 +59,7 @@
         <Config
             Id="0x00001081" Type="2" Enable="true" Timeout="2000" Target="msmnile"
             Resources="0x40C00000, 1, 
-                       0x40804000, 2200, 0x40804100, 0xFFF, 0x40804200, 2600,
+                       0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
                        0x40C18000, 20, 
                        0x40C2C000, 3, 
                        0x41800000, 0xFF,
@@ -136,7 +136,7 @@
         <!-- Type="1", Vertical Scroll boost -->
         <Config
             Id="0x00001080" Type="1" Enable="true" Target="msmnile"
-            Resources="0x40804000, 2300, 0x40804100, 0xFFF, 0x40804200, 2600,
+            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
                        0x40800000, 0, 0x40800100, 1000, 0x40800200, 0,
                        0x40C00000, 2, 
                        0x40C18000, 5, 
@@ -210,7 +210,7 @@
         <!-- Type="1", Drag boost -->
         <Config
             Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
-            Resources="0x40804000, 2300, 0x40804100, 0xFFF, 0x40804200, 2600,
+            Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
                        0x40800000, 0, 0x40800100, 1000, 0x40800200, 0,
                        0x40C00000, 2, 
                        0x40C18000, 5, 
