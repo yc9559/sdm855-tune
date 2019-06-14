@@ -2,7 +2,7 @@
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
-# Version: 20190612
+# Version: 20190614
 
 module_dir="/data/adb/modules/sdm855-tune"
 default_mode_path="/data/powercfg_default_mode"
@@ -224,7 +224,7 @@ if [ "$action" = "debug" ]; then
     echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"
     echo "Author: Matt Yang"
     echo "Platform: sdm855"
-    echo "Version: 20190612"
+    echo "Version: 20190614"
     echo ""
 	exit 0
 fi
