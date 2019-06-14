@@ -37,11 +37,6 @@ apply_tune()
     lock_value 512 /proc/sys/kernel/sched_min_task_util_for_colocation
     lock_value 1700000 /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
   
-    # limit foreground cpu usage
-    # lock_value "0-3" /dev/cpuset/background/cpus
-    # lock_value "1-6" /dev/cpuset/foreground/cpus
-    # lock_value "0-7" /dev/cpuset/top-app/cpus
-
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
     lock_value "0" /dev/stune/background/schedtune.sched_boost_no_override
@@ -58,18 +53,6 @@ apply_tune()
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
     echo "0" > /dev/stune/top-app/schedtune.boost
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
-
-    # 0 -> 125% for A55, target_load = 80
-    # lock_value "0" /sys/devices/system/cpu/cpu0/sched_load_boost
-    # lock_value "0" /sys/devices/system/cpu/cpu1/sched_load_boost
-    # lock_value "0" /sys/devices/system/cpu/cpu2/sched_load_boost
-    # lock_value "0" /sys/devices/system/cpu/cpu3/sched_load_boost
-    # -6 -> 117.5% for A76, target_load = 85
-    # lock_value "-6" /sys/devices/system/cpu/cpu4/sched_load_boost
-    # lock_value "-6" /sys/devices/system/cpu/cpu5/sched_load_boost
-    # lock_value "-6" /sys/devices/system/cpu/cpu6/sched_load_boost
-    # -6 -> 117.5% for A76 prime, target_load = 85
-    # lock_value "-6" /sys/devices/system/cpu/cpu7/sched_load_boost
 
     # CFQ io scheduler takes cgroup into consideration
     lock_value "cfq" /sys/block/sda/queue/scheduler
@@ -98,12 +81,6 @@ apply_tune()
 	echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
 	echo 3 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
 	echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
-
-    # reduce latency of reaching sched_upmigrate, libqti-perfd-client.so will override it
-    # echo "1209600" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-    # echo "90" > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_load
-    # echo "1401600" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-    # echo "90" > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_load
 
     # zram doesn't need much read ahead(random read)
     echo 4 > /sys/block/zram0/queue/read_ahead_kb
