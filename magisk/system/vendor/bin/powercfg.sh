@@ -60,8 +60,6 @@ apply_common()
 
     # CFQ io scheduler takes cgroup into consideration
     lock_value "cfq" /sys/block/sda/queue/scheduler
-    # 32K means read more 32K data(starting at 0x0) when reading at 0x0, lower overhead on random iop
-    lock_value "32" /sys/block/sda/queue/read_ahead_kb
     # Flash doesn't have back seek problem, so penalty is as low as possible
     lock_value "1" /sys/block/sda/queue/iosched/back_seek_penalty
     # slice_idle = 0 means CFQ IOP mode, https://lore.kernel.org/patchwork/patch/944972/
