@@ -27,12 +27,12 @@ apply_tune()
 	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1708 * 0.95 / 1785 = 90.9
-	lock_value "91 95" /proc/sys/kernel/sched_upmigrate
+	lock_value "91 85" /proc/sys/kernel/sched_upmigrate
     # higher sched_downmigrate to use little cluster more
-	lock_value "91 85" /proc/sys/kernel/sched_downmigrate
+	lock_value "91 60" /proc/sys/kernel/sched_downmigrate
 
-    # if task_util >= (16 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
-    lock_value 16 /proc/sys/kernel/sched_min_task_util_for_boost
+    # if task_util >= (2 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
+    lock_value 2 /proc/sys/kernel/sched_min_task_util_for_boost
     # bigger normal colocation boost threshold
     lock_value 512 /proc/sys/kernel/sched_min_task_util_for_colocation
     lock_value 1700000 /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
