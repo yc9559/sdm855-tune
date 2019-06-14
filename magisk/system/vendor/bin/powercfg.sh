@@ -14,17 +14,18 @@ lock_value()
 	fi
 }
 
-apply_tune()
+# $1:mode(such as balance)
+update_qti_perfd_cfg()
 {
-    echo "Applying tuning..."
+    stop perf-hal-1-0
+    cp /data/adb/modules/sdm855-tune/system/vendor/etc/perf/perfd_profiles/${1}/* /data/adb/modules/sdm855-tune/system/vendor/etc/perf/
+    start perf-hal-1-0
+}
 
+apply_common()
+{
     # 580M for empty apps
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
-
-    # power cruve of 576-1209 is almost linear
-	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # 1708 * 0.95 / 1785 = 90.9
 	lock_value "91 85" /proc/sys/kernel/sched_upmigrate
@@ -84,9 +85,94 @@ apply_tune()
 
     # zram doesn't need much read ahead(random read)
     echo 4 > /sys/block/zram0/queue/read_ahead_kb
-
-    echo "Applying tuning done."
 }
+
+apply_powersave()
+{
+    # same as default
+    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+
+	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+
+    # limit the usage of big cluster
+    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # task usually doesn't run on cpu7
+    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+
+    update_qti_perfd_cfg powersave
+}
+
+apply_balance()
+{
+    # same as default
+    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+
+	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+
+    # limit the usage of big cluster
+    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # task usually doesn't run on cpu7
+    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+
+    update_qti_perfd_cfg balance
+}
+
+apply_performance()
+{
+    # same as default
+    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+
+	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+
+    # limit the usage of big cluster
+    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # task usually doesn't run on cpu7
+    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+
+    update_qti_perfd_cfg performance
+}
+
+apply_fast()
+{
+    # same as default
+    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+
+	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+
+    # limit the usage of big cluster
+    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # task usually doesn't run on cpu7
+    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+
+    update_qti_perfd_cfg fast
+}
+
+# suppress stderr
+(
 
 echo ""
 
@@ -97,21 +183,41 @@ if [ ! -n "$action" ]; then
 fi
 
 if [ "$action" = "powersave" ]; then
-    apply_tune
+    apply_common
+    apply_powersave
+    echo "Applying powersave done."
 fi
 
 if [ "$action" = "balance" ]; then
-    apply_tune
+    apply_common
+    apply_balance
+    echo "Applying balance done."
 fi
 
 if [ "$action" = "performance" ]; then
-    apply_tune
+    apply_common
+    apply_performance
+    echo "Applying performance done."
 fi
 
 if [ "$action" = "fast" ]; then
-    apply_tune
+    apply_common
+    apply_fast
+    echo "Applying fast done."
+fi
+
+if [ "$action" = "debug" ]; then
+    echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"
+    echo "Author: Matt Yang"
+    echo "Platform: sdm855"
+    echo "Version: 20190612"
+    echo ""
+	exit 0
 fi
 
 echo ""
+
+# suppress stderr
+) 2>/dev/null
 
 exit 0
