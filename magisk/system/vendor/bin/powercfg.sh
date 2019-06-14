@@ -5,6 +5,7 @@
 # Version: 20190612
 
 module_dir="/data/adb/modules/sdm855-tune"
+default_mode_path="/data/powercfg_default_mode"
 
 # $1:value $2:file path
 lock_value() 
@@ -179,10 +180,21 @@ apply_fast()
 echo ""
 
 action=$1
-# default option is balance
+
 if [ ! -n "$action" ]; then
+    # default option is balance
     action="balance"
+    # load default mode from file
+    if [ -f ${default_mode_path} ]; then
+        default_mode=`cat ${default_mode_path} | cut -d" " -f1`
+        if [ "${default_mode}" != "" ]; then
+            action=${default_mode}
+        fi
+    fi
 fi
+
+# save mode for automatic applying mode after reboot
+echo ${action} > ${default_mode_path}
 
 if [ "$action" = "powersave" ]; then
     apply_common
