@@ -31,15 +31,16 @@ apply_common()
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
     # 1708 * 0.95 / 1785 = 90.9
-	lock_value "91 85" /proc/sys/kernel/sched_upmigrate
     # higher sched_downmigrate to use little cluster more
-	lock_value "91 60" /proc/sys/kernel/sched_downmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo "90 85" > /proc/sys/kernel/sched_upmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
     # if task_util >= (2 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
-    lock_value 2 /proc/sys/kernel/sched_min_task_util_for_boost
+    echo "2" > /proc/sys/kernel/sched_min_task_util_for_boost
     # bigger normal colocation boost threshold
-    lock_value 512 /proc/sys/kernel/sched_min_task_util_for_colocation
-    lock_value 1700000 /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+    echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    echo "1700000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
   
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
@@ -71,103 +72,95 @@ apply_common()
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo 10 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
-	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
+	echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo "10" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+	echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+	echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-	echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
-	echo 3 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
-	echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
+	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+	echo "30" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+	echo "3" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+	echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 
     # zram doesn't need much read ahead(random read)
-    echo 4 > /sys/block/zram0/queue/read_ahead_kb
+    echo "4" > /sys/block/zram0/queue/read_ahead_kb
 }
 
 apply_powersave()
 {
     # 0.3-1.7, 0.7-1.6, 0.8-2.0, boost: 2.0+2.4
-    echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "300000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
 	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-
-    update_qti_perfd_cfg powersave
+	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 apply_balance()
 {
     # 0.5-1.7, 0.7-2.0, 0.8-2.4, boost: 2.3+2.7
-    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 800 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-
-    update_qti_perfd_cfg balance
+	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 apply_performance()
 {
     # 0.5-1.7, 0.7-2.4, 0.8-2.8, boost: 2.4+2.8
-    echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo 825600 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-
-    update_qti_perfd_cfg performance
+	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 apply_fast()
 {
     # 1.0-1.7, 1.6-2.0, 1.6-2.6, boost: 2.4+2.8
-    echo 1036800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo 1612800 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo 1612800 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "1036800" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo "1612800" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "1612800" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
 	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value 2 /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-
-    update_qti_perfd_cfg fast
+	echo "1" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 # suppress stderr
@@ -193,24 +186,28 @@ fi
 echo ${action} > ${default_mode_path}
 
 if [ "$action" = "powersave" ]; then
+    update_qti_perfd_cfg powersave
     apply_common
     apply_powersave
     echo "Applying powersave done."
 fi
 
 if [ "$action" = "balance" ]; then
+    update_qti_perfd_cfg balance
     apply_common
     apply_balance
     echo "Applying balance done."
 fi
 
 if [ "$action" = "performance" ]; then
+    update_qti_perfd_cfg performance
     apply_common
     apply_performance
     echo "Applying performance done."
 fi
 
 if [ "$action" = "fast" ]; then
+    update_qti_perfd_cfg fast
     apply_common
     apply_fast
     echo "Applying fast done."
