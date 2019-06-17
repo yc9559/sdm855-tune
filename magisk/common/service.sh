@@ -3,5 +3,5 @@
 # This will make your scripts compatible even if Magisk change its mount point in the future
 MODDIR=${0%/*}
 
-sleep 20
+sleep 60
 sh $MODDIR/system/vendor/bin/powercfg.sh

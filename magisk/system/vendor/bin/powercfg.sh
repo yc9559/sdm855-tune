@@ -36,7 +36,15 @@ apply_common()
     # bigger normal colocation boost threshold
     echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
     echo "1700000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
-  
+
+    # treat system_server and surfaceflinger as top-app
+    sysserv_pid=`ps -Ao pid,cmd | grep "system_server" | awk '{print $1}'`
+    echo ${sysserv_pid} > /dev/stune/top-app/tasks
+    echo ${sysserv_pid} > /dev/cpuset/top-app/tasks
+    flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
+    echo ${flinger_pid} > /dev/stune/top-app/tasks
+    echo ${flinger_pid} > /dev/cpuset/top-app/tasks
+
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
     lock_value "0" /dev/stune/background/schedtune.sched_boost_no_override
