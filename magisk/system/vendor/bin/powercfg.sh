@@ -23,6 +23,7 @@ update_qti_perfd_cfg()
     stop perf-hal-1-0
     cp ${module_dir}/system/vendor/etc/perf/perfd_profiles/${1}/* ${module_dir}/system/vendor/etc/perf/
     start perf-hal-1-0
+    sleep 1
 }
 
 apply_common()
@@ -89,10 +90,13 @@ apply_common()
 
 apply_powersave()
 {
-    # 0.3-1.7, 0.7-1.6, 0.8-2.0, boost: 2.0+2.4
+    # 0.3-1.7, 0.7-1.6, 0.8-2.0, boost: 2.0+2.4, libqti-perfd-client.so will override it
     echo "300000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
 	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
@@ -108,10 +112,13 @@ apply_powersave()
 
 apply_balance()
 {
-    # 0.5-1.7, 0.7-2.0, 0.8-2.4, boost: 2.3+2.7
+    # 0.5-1.7, 0.7-2.0, 0.8-2.4, boost: 2.3+2.7, libqti-perfd-client.so will override it
     echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
@@ -127,10 +134,13 @@ apply_balance()
 
 apply_performance()
 {
-    # 0.5-1.7, 0.7-2.4, 0.8-2.8, boost: 2.4+2.8
+    # 0.5-1.7, 0.7-2.4, 0.8-2.8, boost: 2.4+2.8, libqti-perfd-client.so will override it
     echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
@@ -146,10 +156,13 @@ apply_performance()
 
 apply_fast()
 {
-    # 1.0-1.7, 1.6-2.0, 1.6-2.6, boost: 2.4+2.8
+    # 1.0-1.7, 1.6-2.0, 1.6-2.6, boost: 2.4+2.8, libqti-perfd-client.so will override it
     echo "1036800" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "1612800" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "1612800" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
 	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
