@@ -132,7 +132,7 @@ apply_balance()
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
 	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
