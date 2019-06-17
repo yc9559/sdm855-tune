@@ -31,14 +31,8 @@ apply_common()
     # 580M for empty apps
 	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # 1708 * 0.95 / 1785 = 90.9
-    # higher sched_downmigrate to use little cluster more
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
-	echo "90 85" > /proc/sys/kernel/sched_upmigrate
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
-
-    # if task_util >= (2 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
-    echo "2" > /proc/sys/kernel/sched_min_task_util_for_boost
+    # if task_util >= (4 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
+    echo "4" > /proc/sys/kernel/sched_min_task_util_for_boost
     # bigger normal colocation boost threshold
     echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
     echo "1700000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
@@ -98,6 +92,12 @@ apply_powersave()
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
+    # 1708 * 0.95 / 1785 = 90.9
+    # higher sched_downmigrate to use little cluster more
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo "90 85" > /proc/sys/kernel/sched_upmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+
 	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
@@ -119,6 +119,12 @@ apply_balance()
     echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
+
+    # 1708 * 0.95 / 1785 = 90.9
+    # higher sched_downmigrate to use little cluster more
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo "90 85" > /proc/sys/kernel/sched_upmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
@@ -142,6 +148,12 @@ apply_performance()
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
+    # 1708 * 0.95 / 1785 = 90.9
+    # higher sched_downmigrate to use little cluster more
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo "90 85" > /proc/sys/kernel/sched_upmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+
 	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
 	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
@@ -164,9 +176,14 @@ apply_fast()
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
+    # same as config_gameBoost
+	echo "40 40" > /proc/sys/kernel/sched_downmigrate
+	echo "60 60" > /proc/sys/kernel/sched_upmigrate
+	echo "40 40" > /proc/sys/kernel/sched_downmigrate
+
 	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+	lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
