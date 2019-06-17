@@ -256,11 +256,17 @@
     <!--Rotation animation boost-->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value-->
         <!-- GPU MIN_FREQUENCY resource opcode,value-->
+        <!-- CPUBW_MIN_FREQ resource opcode, value-->
+        <!-- LLCCBW resource opcode, value-->
+        <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
         <!-- Type="", Rotation animation boost -->
 
         <Config
             Id="0x00001090" Enable="true" Timeout="1000" Target="msmnile"
-            Resources="0x40800100, 1500, 
-                       0x4280C000, 596" />
+            Resources="0x40800100, 0xFFF, 
+                       0x4280C000, 596, 
+                       0x41800000, 122, 
+                       0x43000000, 58, 
+                       0x43400000, 13440" />
     </PerfBoost>
 </BoostConfigs>
