@@ -4,4 +4,4 @@
 MODDIR=${0%/*}
 
 sleep 60
-sh $MODDIR/system/vendor/bin/powercfg.sh
+/vendor/bin/sh $MODDIR/system/vendor/bin/powercfg.sh

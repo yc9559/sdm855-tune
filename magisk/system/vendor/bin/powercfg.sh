@@ -1,4 +1,4 @@
-#!/system/bin/sh
+#! /vendor/bin/sh
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
