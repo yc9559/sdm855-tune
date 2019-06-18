@@ -236,10 +236,6 @@ if [ ! -n "$action" ]; then
     fi
 fi
 
-# save mode for automatic applying mode after reboot
-echo ${action} > ${default_mode_path}
-echo "`date '+%Y-%m-%d %H:%M:%S'`" >> ${default_mode_path}
-
 if [ "$action" = "powersave" ]; then
     update_qti_perfd_cfg powersave
     apply_common
@@ -268,15 +264,15 @@ if [ "$action" = "fast" ]; then
     echo "Applying fast done."
 fi
 
-if [ "$action" = "debug" ]; then
-    echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"
-    echo "Author: Matt Yang"
-    echo "Platform: sdm855"
-    echo "Version: 20190615"
-    echo ""
-    echo ${default_mode_path}
-    exit 0
-fi
+# save mode for automatic applying mode after reboot
+echo ${action}                                              > ${default_mode_path}
+echo ""                                                     >> ${default_mode_path}
+echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${default_mode_path}
+echo "Author:   Matt Yang"                                  >> ${default_mode_path}
+echo "Platform: sdm855"                                     >> ${default_mode_path}
+echo "Version:  20190615"                                   >> ${default_mode_path}
+echo ""                                                     >> ${default_mode_path}
+echo "Last performed: `date '+%Y-%m-%d %H:%M:%S'`"          >> ${default_mode_path}
 
 echo ""
 
