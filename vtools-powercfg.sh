@@ -11,7 +11,7 @@ powercfg_path="/vendor/bin/powercfg.sh"
 # suppress stderr
 (
 
-sh ${powercfg_path} $1
+/vendor/bin/sh ${powercfg_path} $1
 
 # suppress stderr
 ) 2>/dev/null
