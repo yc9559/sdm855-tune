@@ -265,6 +265,14 @@ if [ "$action" = "fast" ]; then
 fi
 
 # save mode for automatic applying mode after reboot
+echo "Updating ${default_mode_path} ..."
+
+while [ ! -e ${default_mode_path} ] 
+do
+    touch ${default_mode_path}
+    sleep 1
+done
+
 echo ${action}                                              > ${default_mode_path}
 echo ""                                                     >> ${default_mode_path}
 echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${default_mode_path}
@@ -273,6 +281,8 @@ echo "Platform: sdm855"                                     >> ${default_mode_pa
 echo "Version:  20190615"                                   >> ${default_mode_path}
 echo ""                                                     >> ${default_mode_path}
 echo "Last performed: `date '+%Y-%m-%d %H:%M:%S'`"          >> ${default_mode_path}
+
+echo "${default_mode_path} has been updated."
 
 echo ""
 
