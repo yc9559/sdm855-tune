@@ -5,7 +5,7 @@
 # Version: 20190615
 
 module_dir="/data/adb/modules/sdm855-tune"
-default_mode_path="/data/powercfg_default_mode"
+default_mode_path="/sdcard/powercfg_default_mode"
 
 # $1:value $2:file path
 lock_value() 
@@ -213,7 +213,7 @@ if [ ! -n "$action" ]; then
     action="balance"
     # load default mode from file
     if [ -f ${default_mode_path} ]; then
-        default_mode=`cat ${default_mode_path} | cut -d" " -f1`
+        default_mode=`cat ${default_mode_path} | sed -n "1p" | awk '{printf $1}'`
         if [ "${default_mode}" != "" ]; then
             action=${default_mode}
         fi
@@ -222,6 +222,7 @@ fi
 
 # save mode for automatic applying mode after reboot
 echo ${action} > ${default_mode_path}
+echo "`date '+%Y-%m-%d %H:%M:%S'`" >> ${default_mode_path}
 
 if [ "$action" = "powersave" ]; then
     update_qti_perfd_cfg powersave
@@ -257,6 +258,7 @@ if [ "$action" = "debug" ]; then
     echo "Platform: sdm855"
     echo "Version: 20190615"
     echo ""
+    echo ${default_mode_path}
     exit 0
 fi
 
