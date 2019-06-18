@@ -10,11 +10,11 @@ default_mode_path="/data/powercfg_default_mode"
 # $1:value $2:file path
 lock_value() 
 {
-	if [ -f ${2} ]; then
-		chmod 0666 ${2}
-		echo ${1} > ${2}
-		chmod 0444 ${2}
-	fi
+    if [ -f ${2} ]; then
+        chmod 0666 ${2}
+        echo ${1} > ${2}
+        chmod 0444 ${2}
+    fi
 }
 
 # $1:mode(such as balance)
@@ -29,7 +29,7 @@ update_qti_perfd_cfg()
 apply_common()
 {
     # 580M for empty apps
-	lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
+    lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
     # if task_util >= (4 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
     echo "4" > /proc/sys/kernel/sched_min_task_util_for_boost
@@ -75,16 +75,16 @@ apply_common()
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo "10" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-	echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
-	echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
+    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "10" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+    echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+    echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-	echo "30" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
-	echo "3" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
-	echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
+    echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    echo "30" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+    echo "3" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+    echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 
     # zram doesn't need much read ahead(random read)
     echo "4" > /sys/block/zram0/queue/read_ahead_kb
@@ -102,20 +102,20 @@ apply_powersave()
 
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
-	echo "90 85" > /proc/sys/kernel/sched_upmigrate
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+    echo "90 60" > /proc/sys/kernel/sched_downmigrate
+    echo "90 85" > /proc/sys/kernel/sched_upmigrate
+    echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
-	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 apply_balance()
@@ -130,20 +130,20 @@ apply_balance()
 
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
-	echo "90 85" > /proc/sys/kernel/sched_upmigrate
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+    echo "90 60" > /proc/sys/kernel/sched_downmigrate
+    echo "90 85" > /proc/sys/kernel/sched_upmigrate
+    echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
-	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 apply_performance()
@@ -158,20 +158,20 @@ apply_performance()
 
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
-	echo "90 85" > /proc/sys/kernel/sched_upmigrate
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+    echo "90 60" > /proc/sys/kernel/sched_downmigrate
+    echo "90 85" > /proc/sys/kernel/sched_upmigrate
+    echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
-	lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 apply_fast()
@@ -185,20 +185,20 @@ apply_fast()
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
     # same as config_gameBoost
-	echo "40 40" > /proc/sys/kernel/sched_downmigrate
-	echo "60 60" > /proc/sys/kernel/sched_upmigrate
-	echo "40 40" > /proc/sys/kernel/sched_downmigrate
+    echo "40 40" > /proc/sys/kernel/sched_downmigrate
+    echo "60 60" > /proc/sys/kernel/sched_upmigrate
+    echo "40 40" > /proc/sys/kernel/sched_downmigrate
 
-	lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
-	lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
-	echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "3" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu7/core_ctl/enable
-	echo "1" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+    echo "1" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
 # suppress stderr
@@ -257,7 +257,7 @@ if [ "$action" = "debug" ]; then
     echo "Platform: sdm855"
     echo "Version: 20190615"
     echo ""
-	exit 0
+    exit 0
 fi
 
 echo ""
