@@ -110,6 +110,10 @@ apply_powersave()
     lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
+    # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "0" > /dev/stune/top-app/schedtune.boost
+    echo "0" > /dev/stune/top-app/schedtune.prefer_idle
+
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
     echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
@@ -133,6 +137,10 @@ apply_balance()
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
     echo "90 85" > /proc/sys/kernel/sched_upmigrate
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
+
+    # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "0" > /dev/stune/top-app/schedtune.boost
+    echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
     lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
@@ -162,9 +170,13 @@ apply_performance()
     echo "90 85" > /proc/sys/kernel/sched_upmigrate
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
-    lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "10" > /dev/stune/top-app/schedtune.boost
+    echo "1" > /dev/stune/top-app/schedtune.prefer_idle
+
+    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
@@ -188,6 +200,10 @@ apply_fast()
     echo "40 40" > /proc/sys/kernel/sched_downmigrate
     echo "60 60" > /proc/sys/kernel/sched_upmigrate
     echo "40 40" > /proc/sys/kernel/sched_downmigrate
+
+    # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "20" > /dev/stune/top-app/schedtune.boost
+    echo "1" > /dev/stune/top-app/schedtune.prefer_idle
 
     lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
