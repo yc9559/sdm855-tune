@@ -55,12 +55,9 @@ apply_common()
     lock_value "0" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
-    # "boost" effect on ArkNight(CPU0 frequency used most): 0->1036, 1->1113, 5->1305
+    # allow top-app sched_boost
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
-    # do not use lock_value(), libqti-perfd-client.so will fail to override it
-    echo "0" > /dev/stune/top-app/schedtune.boost
-    echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
     # CFQ io scheduler takes cgroup into consideration
     lock_value "cfq" /sys/block/sda/queue/scheduler
