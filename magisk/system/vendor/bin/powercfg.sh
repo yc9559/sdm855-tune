@@ -31,19 +31,16 @@ apply_common()
     # 580M for empty apps
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # if task_util >= (4 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
-    echo "4" > /proc/sys/kernel/sched_min_task_util_for_boost
-    # bigger normal colocation boost threshold
-    echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
-    echo "1700000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+    # if task_util >= (16 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
+    echo "16" > /proc/sys/kernel/sched_min_task_util_for_boost
+    # bigger normal colocation boost threshold(if sched_boost != 2)
+    echo "768" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    # slightly higher colocation util report
+    echo "1200000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
 
-    # treat system_server and surfaceflinger as top-app
-    sysserv_pid=`ps -Ao pid,cmd | grep "system_server" | awk '{print $1}'`
-    echo ${sysserv_pid} > /dev/stune/top-app/tasks
-    echo ${sysserv_pid} > /dev/cpuset/top-app/tasks
+    # treat surfaceflinger as display
     flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
-    echo ${flinger_pid} > /dev/stune/top-app/tasks
-    echo ${flinger_pid} > /dev/cpuset/top-app/tasks
+    echo ${flinger_pid} > /dev/cpuset/display/tasks
 
     # always limit background task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
@@ -80,7 +77,7 @@ apply_common()
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
     echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
     echo "30" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
-    echo "3" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+    echo "10" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
     echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 
     # zram doesn't need much read ahead(random read)
@@ -145,7 +142,7 @@ apply_balance()
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-    echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
     echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
