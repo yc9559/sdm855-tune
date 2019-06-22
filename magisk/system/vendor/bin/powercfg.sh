@@ -31,25 +31,33 @@ apply_common()
     # 580M for empty apps
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # if task_util >= (16 / 1024 * 20ms), the task will be boosted(if sched_boost == 2)
-    echo "16" > /proc/sys/kernel/sched_min_task_util_for_boost
-    # bigger normal colocation boost threshold(if sched_boost != 2)
-    echo "768" > /proc/sys/kernel/sched_min_task_util_for_colocation
-    # slightly higher colocation util report
+    # if task_util >= (896 / 1024 * 20ms = 17.5ms)
+    echo "896" > /proc/sys/kernel/sched_min_task_util_for_boost
+    # if task_util >= (384 / 1024 * 20ms = 10.0ms)
+    echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    # higher colocation util report
     echo "1200000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+
+    # avoid display preemption on big
+    lock_value "0-3" /dev/cpuset/display/cpus
 
     # treat surfaceflinger as display
     flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
     echo ${flinger_pid} > /dev/cpuset/display/tasks
 
-    # always limit background task
+    # move all top-app to foreground to reduce nr_top_app
+    for ttask in `cat /dev/cpuset/top-app/tasks`
+    do
+        echo ${ttask} > /dev/cpuset/foreground/tasks
+    done
+
+    # always limit background & foreground task
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
-    lock_value "0" /dev/stune/background/schedtune.sched_boost_no_override
+    lock_value "1" /dev/stune/background/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/background/schedtune.boost
     lock_value "0" /dev/stune/background/schedtune.prefer_idle
-    # limit sched_boost override on foreground task
-    lock_value "1" /dev/stune/foreground/schedtune.sched_boost_enabled
-    lock_value "0" /dev/stune/foreground/schedtune.sched_boost_no_override
+    lock_value "0" /dev/stune/foreground/schedtune.sched_boost_enabled
+    lock_value "1" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
     # allow top-app sched_boost
@@ -68,14 +76,10 @@ apply_common()
     # turn off hotplug to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
     # limit the usage of big cluster
-    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     echo "30" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
     echo "5" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
     echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
     # task usually doesn't run on cpu7
-    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
-    echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
     echo "30" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
     echo "10" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
     echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
@@ -142,7 +146,7 @@ apply_balance()
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
     echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
