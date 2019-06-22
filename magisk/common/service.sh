@@ -3,6 +3,4 @@
 # This will make your scripts compatible even if Magisk change its mount point in the future
 MODDIR=${0%/*}
 
-# wait for system_server and surfaceflinger up
-sleep 60
 /vendor/bin/sh $MODDIR/system/vendor/bin/powercfg.sh

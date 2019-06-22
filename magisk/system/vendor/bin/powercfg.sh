@@ -234,6 +234,13 @@ if [ ! -n "$action" ]; then
     fi
 fi
 
+# we doesn't have the permission to write "/sdcard" before the user unlocks the screen
+while [ ! -e ${default_mode_path} ] 
+do
+    touch ${default_mode_path}
+    sleep 2
+done
+
 if [ "$action" = "powersave" ]; then
     update_qti_perfd_cfg powersave
     apply_common
@@ -263,14 +270,6 @@ if [ "$action" = "fast" ]; then
 fi
 
 # save mode for automatic applying mode after reboot
-echo "Updating ${default_mode_path} ..."
-
-while [ ! -e ${default_mode_path} ] 
-do
-    touch ${default_mode_path}
-    sleep 1
-done
-
 echo ${action}                                              > ${default_mode_path}
 echo ""                                                     >> ${default_mode_path}
 echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${default_mode_path}
