@@ -88,6 +88,11 @@ apply_common()
 
     # zram doesn't need much read ahead(random read)
     echo "4" > /sys/block/zram0/queue/read_ahead_kb
+
+    # unify scaling_max_freq, libqti-perfd-client.so will override it
+    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 }
 
 apply_powersave()
@@ -96,9 +101,6 @@ apply_powersave()
     echo "300000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
-    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
@@ -106,13 +108,13 @@ apply_powersave()
     echo "90 85" > /proc/sys/kernel/sched_upmigrate
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
-    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
-
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
     echo "0" > /dev/stune/top-app/schedtune.boost
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
+
+    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
@@ -124,13 +126,10 @@ apply_powersave()
 
 apply_balance()
 {
-    # 0.5-1.7, 0.7-2.0, 0.8-2.4, boost: 2.3+2.7, libqti-perfd-client.so will override it
+    # libqti-perfd-client.so will override it
     echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
-    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
@@ -160,9 +159,6 @@ apply_performance()
     echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
-    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
@@ -192,9 +188,6 @@ apply_fast()
     echo "1036800" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "1612800" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "1612800" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
-    echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
     # same as config_gameBoost
     echo "40 40" > /proc/sys/kernel/sched_downmigrate
