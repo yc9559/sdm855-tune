@@ -72,6 +72,8 @@ apply_common()
     lock_value "0" /sys/block/sda/queue/iosched/slice_idle
     # UFS 2.0+ hardware queue depth is 32
     lock_value "16" /sys/block/sda/queue/iosched/quantum
+    # lower read_ahead_kb to reduce random access overhead
+    lock_value "128" /sys/block/sda/queue/read_ahead_kb
 
     # turn off hotplug to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
