@@ -2,7 +2,7 @@
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
-# Version: 20190615
+# Version: 20190624
 
 module_dir="/data/adb/modules/sdm855-tune"
 default_mode_path="/sdcard/powercfg_default_mode"
@@ -275,7 +275,7 @@ echo ""                                                     >> ${default_mode_pa
 echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${default_mode_path}
 echo "Author:   Matt Yang"                                  >> ${default_mode_path}
 echo "Platform: sdm855"                                     >> ${default_mode_path}
-echo "Version:  20190615"                                   >> ${default_mode_path}
+echo "Version:  20190624"                                   >> ${default_mode_path}
 echo ""                                                     >> ${default_mode_path}
 echo "Last performed: `date '+%Y-%m-%d %H:%M:%S'`"          >> ${default_mode_path}
 

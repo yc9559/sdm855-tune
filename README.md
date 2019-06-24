@@ -60,7 +60,7 @@ balance
 sdm855-tune https://github.com/yc9559/sdm855-tune/
 Author:   Matt Yang
 Platform: sdm855
-Version:  20190615
+Version:  20190624
 
 Last performed: 2019-06-18 10:30:24
 ```
