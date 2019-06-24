@@ -21,6 +21,7 @@ lock_value()
 update_qti_perfd_cfg()
 {
     stop perf-hal-1-0
+    rm /data/vendor/perfd/default_values
     cp ${module_dir}/system/vendor/etc/perf/perfd_profiles/${1}/* ${module_dir}/system/vendor/etc/perf/
     start perf-hal-1-0
     sleep 1
@@ -37,6 +38,9 @@ apply_common()
     echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # higher colocation util report
     echo "1200000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+
+    # prevent foreground using big cluster, libqti-perfd-client.so will override it
+    echo "0-3" > /dev/cpuset/foreground/cpus
 
     # avoid display preemption on big
     lock_value "0-3" /dev/cpuset/display/cpus
@@ -237,30 +241,30 @@ do
 done
 
 if [ "$action" = "powersave" ]; then
-    update_qti_perfd_cfg powersave
     apply_common
     apply_powersave
+    update_qti_perfd_cfg powersave
     echo "Applying powersave done."
 fi
 
 if [ "$action" = "balance" ]; then
-    update_qti_perfd_cfg balance
     apply_common
     apply_balance
+    update_qti_perfd_cfg balance
     echo "Applying balance done."
 fi
 
 if [ "$action" = "performance" ]; then
-    update_qti_perfd_cfg performance
     apply_common
     apply_performance
+    update_qti_perfd_cfg performance
     echo "Applying performance done."
 fi
 
 if [ "$action" = "fast" ]; then
-    update_qti_perfd_cfg fast
     apply_common
     apply_fast
+    update_qti_perfd_cfg fast
     echo "Applying fast done."
 fi
 
