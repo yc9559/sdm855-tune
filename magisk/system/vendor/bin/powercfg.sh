@@ -32,12 +32,12 @@ apply_common()
     # 580M for empty apps
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # if task_util >= (896 / 1024 * 20ms = 17.5ms)
-    echo "896" > /proc/sys/kernel/sched_min_task_util_for_boost
-    # if task_util >= (384 / 1024 * 20ms = 10.0ms)
-    echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
-    # higher colocation util report
-    echo "1200000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+    # if task_util >= (1000 / 1024 * 20ms = 19.5ms)
+    echo "1000" > /proc/sys/kernel/sched_min_task_util_for_boost
+    # if task_util >= (768 / 1024 * 20ms = 15ms)
+    echo "768" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    # normal colocation util report
+    echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
 
     # prevent foreground using big cluster, libqti-perfd-client.so will override it
     echo "0-3" > /dev/cpuset/foreground/cpus
@@ -82,11 +82,12 @@ apply_common()
     # turn off hotplug to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
     # limit the usage of big cluster
-    echo "30" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+    echo "15" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
     echo "5" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
     echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
+    echo "5" > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
     # task usually doesn't run on cpu7
-    echo "30" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+    echo "15" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
     echo "10" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
     echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 
@@ -117,7 +118,7 @@ apply_powersave()
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
     lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
@@ -146,12 +147,12 @@ apply_balance()
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
     lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "800" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-    echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "2" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
     echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
@@ -174,9 +175,9 @@ apply_performance()
     echo "10" > /dev/stune/top-app/schedtune.boost
     echo "1" > /dev/stune/top-app/schedtune.prefer_idle
 
-    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "0:1209600 4:1612800 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "2000" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
@@ -203,8 +204,8 @@ apply_fast()
     echo "1" > /dev/stune/top-app/schedtune.prefer_idle
 
     lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "2500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "2000" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "1" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # turn off core_ctl to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu4/core_ctl/enable
