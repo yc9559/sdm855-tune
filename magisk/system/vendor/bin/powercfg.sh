@@ -17,14 +17,23 @@ lock_value()
     fi
 }
 
-# $1:mode(such as balance)
-update_qti_perfd_cfg()
+# stop before updating cfg
+stop_qti_perfd()
 {
     stop perf-hal-1-0
+}
+
+# start after updating cfg
+start_qti_perfd()
+{
+    start perf-hal-1-0
+}
+
+# $1:mode(such as balance)
+update_qti_perfd()
+{
     rm /data/vendor/perfd/default_values
     cp ${module_dir}/system/vendor/etc/perf/perfd_profiles/${1}/* ${module_dir}/system/vendor/etc/perf/
-    start perf-hal-1-0
-    sleep 1
 }
 
 apply_common()
@@ -32,10 +41,10 @@ apply_common()
     # 580M for empty apps
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # if task_util >= (1000 / 1024 * 20ms = 19.5ms)
-    echo "1000" > /proc/sys/kernel/sched_min_task_util_for_boost
-    # if task_util >= (768 / 1024 * 20ms = 15ms)
-    echo "768" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    # if task_util >= (896 / 1024 * 20ms = 17.5ms)
+    echo "896" > /proc/sys/kernel/sched_min_task_util_for_boost
+    # if task_util >= (640 / 1024 * 20ms = 12.5ms)
+    echo "640" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # normal colocation util report
     echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
 
@@ -242,30 +251,38 @@ do
 done
 
 if [ "$action" = "powersave" ]; then
+    stop_qti_perfd
     apply_common
     apply_powersave
-    update_qti_perfd_cfg powersave
+    update_qti_perfd powersave
+    start_qti_perfd
     echo "Applying powersave done."
 fi
 
 if [ "$action" = "balance" ]; then
+    stop_qti_perfd
     apply_common
     apply_balance
-    update_qti_perfd_cfg balance
+    update_qti_perfd balance
+    start_qti_perfd
     echo "Applying balance done."
 fi
 
 if [ "$action" = "performance" ]; then
+    stop_qti_perfd
     apply_common
     apply_performance
-    update_qti_perfd_cfg performance
+    update_qti_perfd performance
+    start_qti_perfd
     echo "Applying performance done."
 fi
 
 if [ "$action" = "fast" ]; then
+    stop_qti_perfd
     apply_common
     apply_fast
-    update_qti_perfd_cfg fast
+    update_qti_perfd fast
+    start_qti_perfd
     echo "Applying fast done."
 fi
 
