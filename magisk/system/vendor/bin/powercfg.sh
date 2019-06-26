@@ -47,6 +47,10 @@ apply_common()
     echo "640" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # normal colocation util report
     echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+    # prevent big tasks which we aren't interacting with running on big cluster
+    echo "0" > /proc/sys/kernel/sched_walt_rotate_big_tasks
+    # placebo tweak
+    echo "0" > /proc/sys/kernel/sched_schedstats
 
     # prevent foreground using big cluster, libqti-perfd-client.so will override it
     echo "0-3" > /dev/cpuset/foreground/cpus
@@ -72,7 +76,7 @@ apply_common()
     lock_value "0" /dev/stune/foreground/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
-    lock_value "0" /dev/stune/foreground/schedtune.prefer_idle
+    lock_value "1" /dev/stune/foreground/schedtune.prefer_idle
     # allow top-app sched_boost
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
@@ -107,6 +111,13 @@ apply_common()
     echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
+
+    # adreno default settings
+    lock_value "0" /sys/class/kgsl/kgsl-3d0/force_no_nap
+    lock_value "1" /sys/class/kgsl/kgsl-3d0/bus_split
+    lock_value "0" /sys/class/kgsl/kgsl-3d0/force_bus_on
+    lock_value "0" /sys/class/kgsl/kgsl-3d0/force_clk_on
+    lock_value "0" /sys/class/kgsl/kgsl-3d0/force_rail_on
 }
 
 apply_powersave()
@@ -155,7 +166,7 @@ apply_balance()
     echo "0" > /dev/stune/top-app/schedtune.boost
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
-    lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "0:1036800 4:1056000 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
