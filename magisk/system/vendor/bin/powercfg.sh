@@ -51,6 +51,7 @@ apply_common()
     echo "0" > /proc/sys/kernel/sched_walt_rotate_big_tasks
     # placebo tweak
     echo "0" > /proc/sys/kernel/sched_schedstats
+    echo "1000000" > /proc/sys/kernel/sched_wakeup_granularity_ns
 
     # prevent foreground using big cluster, libqti-perfd-client.so will override it
     echo "0-3" > /dev/cpuset/foreground/cpus
@@ -139,7 +140,7 @@ apply_powersave()
 
     lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
@@ -168,7 +169,7 @@ apply_balance()
 
     lock_value "0:1036800 4:1056000 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable

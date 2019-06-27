@@ -33,10 +33,10 @@
 
         <!-- Type="1", main launch boost of 2sec -->
         <Config
-            Id="0x00001081" Type="1" Enable="true" Timeout="400" Target="msmnile"
+            Id="0x00001081" Type="1" Enable="true" Timeout="500" Target="msmnile"
             Resources="0x40C00000, 1, 
                        0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 2700,
-                       0x40800000, 2000, 0x40800100, 0xFFF, 0x40800200, 2000, 
+                       0x40800000, 1600, 0x40800100, 1200, 0x40800200, 2000, 
                        0x40C40000, 127, 
                        0x40C2C000, 3, 
                        0x41800000, 0xFF,
@@ -61,9 +61,9 @@
         <!-- Type="2", launch boost for disable packing 1.5sec -->
         <Config
             Id="0x00001081" Type="2" Enable="true" Timeout="2000" Target="msmnile"
-            Resources="0x40C00000, 1, 
+            Resources="0x40C00000, 0, 
                        0x40804000, 2200, 0x40804100, 0xFFF, 0x40804200, 2600,
-                       0x40C18000, 20, 
+                       0x40C18000, 50, 
                        0x40C40000, 127, 
                        0x40C2C000, 3, 
                        0x41800000, 0xFF,
