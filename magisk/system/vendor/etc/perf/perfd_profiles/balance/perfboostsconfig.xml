@@ -23,7 +23,7 @@
         <!-- CPUBOOST_MIN_FREQ BIG Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ PRIME Core resource opcode, value-->
-        <!-- FOREGROUND_CPUSET_CPUS_BITFIELD resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- POWER COLLAPSE resource opcode, value-->
@@ -51,7 +51,7 @@
         <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
-        <!-- FOREGROUND_CPUSET_CPUS_BITFIELD resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- POWER COLLAPSE resource opcode, value-->
@@ -131,8 +131,8 @@
         <!-- SCHEDBOOST resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
-        <!-- TOP_APP_CPUSET_CPUS_BITFIELD resource opcode, value-->
-        <!-- FOREGROUND_CPUSET_CPUS_BITFIELD resource opcode, value-->
+        <!-- TOP_APP_CPUSET resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
 
         <!-- Type="1", Vertical Scroll boost -->
         <Config
@@ -143,7 +143,7 @@
                        0x40C18000, 0, 
                        0x40C2C000, 3, 
                        0x40C3C000, 112, 
-                       0x40C40000, 112 " />
+                       0x40C40000, 79 " />
 
     <!--Prefling Scroll boost-->
         <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
@@ -199,8 +199,8 @@
         <!-- SCHEDBOOST resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
-        <!-- TOP_APP_CPUSET_CPUS_BITFIELD resource opcode, value-->
-        <!-- FOREGROUND_CPUSET_CPUS_BITFIELD resource opcode, value-->
+        <!-- TOP_APP_CPUSET resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
 
         <!-- Type="1", Drag boost -->
         <Config
@@ -211,7 +211,7 @@
                        0x40C18000, 0, 
                        0x40C2C000, 3, 
                        0x40C3C000, 112, 
-                       0x40C40000, 112 " />
+                       0x40C40000, 79 " />
 
     <!--PackageInstall boost-->
         <!-- SCHEDBOOST resource opcode, value-->

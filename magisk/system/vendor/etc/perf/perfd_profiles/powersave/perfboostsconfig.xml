@@ -23,7 +23,7 @@
         <!-- CPUBOOST_MIN_FREQ BIG Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value-->
         <!-- CPUBOOST_MIN_FREQ PRIME Core resource opcode, value-->
-        <!-- FOREGROUND_CPUSET_CPUS_BITFIELD resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- POWER COLLAPSE resource opcode, value-->
@@ -51,7 +51,7 @@
         <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
-        <!-- FOREGROUND_CPUSET_CPUS_BITFIELD resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
         <!-- POWER COLLAPSE resource opcode, value-->
