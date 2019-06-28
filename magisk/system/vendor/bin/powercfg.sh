@@ -63,13 +63,24 @@ apply_common()
     flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
     echo ${flinger_pid} > /dev/cpuset/display/tasks
 
+    # treat crtc_commit as display
+    crtc_pids=`ps -Ao pid,cmd | grep "crtc_commit" | awk '{print $1}'`
+    for crtc_pid in ${crtc_pids}
+    do
+        echo ${crtc_pid} > /dev/cpuset/display/tasks
+    done
+
+    # treat servicemanager as foreground, fix laggy scrolling bilibili feed issue
+    servmgr_pid=`ps -Ao pid,cmd | grep " servicemanager" | awk '{print $1}'`
+    echo ${servmgr_pid} > /dev/cpuset/foreground/tasks
+
     # move all top-app to foreground to reduce nr_top_app
     for ttask in `cat /dev/cpuset/top-app/tasks`
     do
         echo ${ttask} > /dev/cpuset/foreground/tasks
     done
 
-    # always limit background & foreground task
+    # unify schedtune misc
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/background/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/background/schedtune.boost
@@ -78,8 +89,7 @@ apply_common()
     lock_value "1" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "1" /dev/stune/foreground/schedtune.prefer_idle
-    # allow top-app sched_boost
-    lock_value "1" /dev/stune/top-app/schedtune.sched_boost_enabled
+    lock_value "0" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
 
     # CFQ io scheduler takes cgroup into consideration
