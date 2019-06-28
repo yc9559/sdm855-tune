@@ -5,7 +5,7 @@
 # Version: 20190624
 
 module_dir="/data/adb/modules/sdm855-tune"
-default_mode_path="/sdcard/powercfg_default_mode"
+panel_path="/sdcard/powercfg_panel"
 
 # target power mode
 action=$1
@@ -43,8 +43,8 @@ update_qti_perfd()
 read_cfg_value()
 {
     value=""
-    if [ -f ${default_mode_path} ]; then
-        value=`grep "^${1}=" "${default_mode_path}" | tr -d ' ' | cut -d= -f2`
+    if [ -f ${panel_path} ]; then
+        value=`grep "^${1}=" "${panel_path}" | tr -d ' ' | cut -d= -f2`
     fi
     echo ${value}
 }
@@ -316,9 +316,9 @@ apply_power_mode()
 echo ""
 
 # we doesn't have the permission to rw "/sdcard" before the user unlocks the screen
-while [ ! -e ${default_mode_path} ] 
+while [ ! -e ${panel_path} ] 
 do
-    touch ${default_mode_path}
+    touch ${panel_path}
     sleep 2
 done
 
@@ -336,21 +336,21 @@ fi
 apply_power_mode ${action}
 
 # save mode for automatic applying mode after reboot
-echo ""                                                     > ${default_mode_path}
-echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${default_mode_path}
-echo "Author:   Matt Yang"                                  >> ${default_mode_path}
-echo "Platform: sdm855"                                     >> ${default_mode_path}
-echo "Version:  20190624"                                   >> ${default_mode_path}
-echo ""                                                     >> ${default_mode_path}
-echo "[status]"                                             >> ${default_mode_path}
-echo "Power mode:     ${action}"                            >> ${default_mode_path}
-echo "Last performed: `date '+%Y-%m-%d %H:%M:%S'`"          >> ${default_mode_path}
-echo ""                                                     >> ${default_mode_path}
-echo "[settings]"                                           >> ${default_mode_path}
-echo "# Available mode: balance powersave performance fast" >> ${default_mode_path}
-echo "default_mode=${action}"                               >> ${default_mode_path}
+echo ""                                                     >  ${panel_path}
+echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${panel_path}
+echo "Author:   Matt Yang"                                  >> ${panel_path}
+echo "Platform: sdm855"                                     >> ${panel_path}
+echo "Version:  20190624"                                   >> ${panel_path}
+echo ""                                                     >> ${panel_path}
+echo "[status]"                                             >> ${panel_path}
+echo "Power mode:     ${action}"                            >> ${panel_path}
+echo "Last performed: `date '+%Y-%m-%d %H:%M:%S'`"          >> ${panel_path}
+echo ""                                                     >> ${panel_path}
+echo "[settings]"                                           >> ${panel_path}
+echo "# Available mode: balance powersave performance fast" >> ${panel_path}
+echo "default_mode=${action}"                               >> ${panel_path}
 
-echo "${default_mode_path} has been updated."
+echo "${panel_path} has been updated."
 
 echo ""
 

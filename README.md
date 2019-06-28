@@ -31,7 +31,7 @@
 1. 在[Release页面](https://github.com/yc9559/sdm855-tune/releases)下载magisk模块
 2. 在Magisk Manager内刷入
 3. 重启
-4. 修改`/sdcard/powercfg_default_mode`的内容来选择开机后默认设置的模式，可选的字段有`balance`，`powersave`，`performance`，`fast`
+4. 修改`/sdcard/powercfg_panel`的内容来选择开机后默认设置的模式，可选的字段有`balance`，`powersave`，`performance`，`fast`
 5. 重启
 
 ### 动态配置步骤(微工具箱)
@@ -53,16 +53,22 @@
 
 ### 检查是否生效
 
-打开`/scdcard/powercfg_default_mode`，内容为如下形式：  
+打开`/sdcard/powercfg_panel`，内容为如下形式：  
 ```
-balance
-
 sdm855-tune https://github.com/yc9559/sdm855-tune/
 Author:   Matt Yang
 Platform: sdm855
 Version:  20190624
 
-Last performed: 2019-06-18 10:30:24
+[status]
+Power mode:     balance
+Last performed: 2019-06-28 15:13:12
+
+[settings]
+# Available mode: balance powersave performance fast
+default_mode=balance
+
 ```
-第一行是最近一次执行应用的性能模式，另外，可以更改它来选择开机后默认设置的模式  
-最后一行是最近一次执行的时间，如果跟最近一次开机时间或者最近一次切换时间接近，则表示已生效  
+
+`[status]`是最近一次执行的时间和结果，如果跟最近一次开机时间或者最近一次切换时间接近，则表示已生效  
+修改`default_mode`来选择下次执行的默认设置，注意执行`/vendor/bin/sh /vendor/bin/powercfg.sh fast`也会把`default_mode`设置为`fast`  
