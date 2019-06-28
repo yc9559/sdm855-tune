@@ -7,6 +7,9 @@
 module_dir="/data/adb/modules/sdm855-tune"
 default_mode_path="/sdcard/powercfg_default_mode"
 
+# target power mode
+action=$1
+
 # $1:value $2:file path
 lock_value() 
 {
@@ -34,6 +37,16 @@ update_qti_perfd()
 {
     rm /data/vendor/perfd/default_values
     cp ${module_dir}/system/vendor/etc/perf/perfd_profiles/${1}/* ${module_dir}/system/vendor/etc/perf/
+}
+
+# $1:key $return:value(string)
+read_cfg_value()
+{
+    value=""
+    if [ -f ${default_mode_path} ]; then
+        value=`grep "^${1}=" "${default_mode_path}" | tr -d ' ' | cut -d= -f2`
+    fi
+    echo ${value}
 }
 
 apply_common()
@@ -249,83 +262,99 @@ apply_fast()
     echo "1" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 }
 
+# $1: power_mode
+apply_power_mode()
+{
+    case "${1}" in
+    "powersave") 
+        stop_qti_perfd
+        apply_common
+        apply_powersave
+        update_qti_perfd powersave
+        start_qti_perfd
+        echo "Applying powersave done."
+    ;;
+    "balance")
+        stop_qti_perfd
+        apply_common
+        apply_balance
+        update_qti_perfd balance
+        start_qti_perfd
+        echo "Applying balance done."
+    ;;
+    "performance") 
+        stop_qti_perfd
+        apply_common
+        apply_performance
+        update_qti_perfd performance
+        start_qti_perfd
+        echo "Applying performance done."
+    ;;
+    "fast") 
+        stop_qti_perfd
+        apply_common
+        apply_fast
+        update_qti_perfd fast
+        start_qti_perfd
+        echo "Applying fast done."
+    ;;
+    *) 
+        action="balance"
+        stop_qti_perfd
+        apply_common
+        apply_balance
+        update_qti_perfd balance
+        start_qti_perfd
+        echo "Applying balance done."
+    ;;
+    esac
+}
+
 # suppress stderr
 (
 
 echo ""
 
-action=$1
-
-if [ ! -n "$action" ]; then
-    # default option is balance
-    action="balance"
-    # load default mode from file
-    if [ -f ${default_mode_path} ]; then
-        default_mode=`cat ${default_mode_path} | sed -n "1p" | awk '{printf $1}'`
-        if [ "${default_mode}" != "" ]; then
-            action=${default_mode}
-        fi
-    fi
-fi
-
-# we doesn't have the permission to write "/sdcard" before the user unlocks the screen
+# we doesn't have the permission to rw "/sdcard" before the user unlocks the screen
 while [ ! -e ${default_mode_path} ] 
 do
     touch ${default_mode_path}
     sleep 2
 done
 
-if [ "$action" = "powersave" ]; then
-    stop_qti_perfd
-    apply_common
-    apply_powersave
-    update_qti_perfd powersave
-    start_qti_perfd
-    echo "Applying powersave done."
+if [ ! -n "$action" ]; then
+    # default option is balance
+    action="balance"
+    # load default mode from file
+    default_action=`read_cfg_value default_mode`
+    if [ "${default_action}" != "" ]; then
+        action=${default_action}
+    fi
 fi
 
-if [ "$action" = "balance" ]; then
-    stop_qti_perfd
-    apply_common
-    apply_balance
-    update_qti_perfd balance
-    start_qti_perfd
-    echo "Applying balance done."
-fi
-
-if [ "$action" = "performance" ]; then
-    stop_qti_perfd
-    apply_common
-    apply_performance
-    update_qti_perfd performance
-    start_qti_perfd
-    echo "Applying performance done."
-fi
-
-if [ "$action" = "fast" ]; then
-    stop_qti_perfd
-    apply_common
-    apply_fast
-    update_qti_perfd fast
-    start_qti_perfd
-    echo "Applying fast done."
-fi
+# perform hotfix
+apply_power_mode ${action}
 
 # save mode for automatic applying mode after reboot
-echo ${action}                                              > ${default_mode_path}
-echo ""                                                     >> ${default_mode_path}
+echo ""                                                     > ${default_mode_path}
 echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${default_mode_path}
 echo "Author:   Matt Yang"                                  >> ${default_mode_path}
 echo "Platform: sdm855"                                     >> ${default_mode_path}
 echo "Version:  20190624"                                   >> ${default_mode_path}
 echo ""                                                     >> ${default_mode_path}
+echo "[status]"                                             >> ${default_mode_path}
+echo "Power mode:     ${action}"                            >> ${default_mode_path}
 echo "Last performed: `date '+%Y-%m-%d %H:%M:%S'`"          >> ${default_mode_path}
+echo ""                                                     >> ${default_mode_path}
+echo "[settings]"                                           >> ${default_mode_path}
+echo "# Available mode: balance powersave performance fast" >> ${default_mode_path}
+echo "default_mode=${action}"                               >> ${default_mode_path}
 
 echo "${default_mode_path} has been updated."
 
 echo ""
 
 # suppress stderr
-) 2>/dev/null
+) 2> /dev/null
 
 exit 0
