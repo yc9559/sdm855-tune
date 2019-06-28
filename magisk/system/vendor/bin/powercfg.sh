@@ -53,24 +53,7 @@ apply_common()
     echo "0" > /proc/sys/kernel/sched_schedstats
     echo "1000000" > /proc/sys/kernel/sched_wakeup_granularity_ns
 
-    # prevent foreground using big cluster, libqti-perfd-client.so will override it
-    echo "0-3" > /dev/cpuset/foreground/cpus
-
-    # avoid display preemption on big
-    lock_value "0-3" /dev/cpuset/display/cpus
-
-    # treat surfaceflinger as display
-    flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
-    echo ${flinger_pid} > /dev/cpuset/display/tasks
-
-    # treat crtc_commit as display
-    crtc_pids=`ps -Ao pid,cmd | grep "crtc_commit" | awk '{print $1}'`
-    for crtc_pid in ${crtc_pids}
-    do
-        echo ${crtc_pid} > /dev/cpuset/display/tasks
-    done
-
-    # treat servicemanager as foreground, fix laggy scrolling bilibili feed issue
+    # treat servicemanager as foreground, fix laggy bilibili feed scrolling
     servmgr_pid=`ps -Ao pid,cmd | grep " servicemanager" | awk '{print $1}'`
     echo ${servmgr_pid} > /dev/cpuset/foreground/tasks
 
@@ -79,6 +62,26 @@ apply_common()
     do
         echo ${ttask} > /dev/cpuset/foreground/tasks
     done
+
+    # prevent foreground using big cluster, may be override
+    echo "0-3" > /dev/cpuset/foreground/cpus
+
+    # treat surfaceflinger as display
+    flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
+    for flinger_tid in `ls /proc/${flinger_pid}/task/`
+    do
+        echo ${flinger_tid} > /dev/cpuset/display/tasks
+    done
+
+    # treat crtc_commit as display
+    crtc_pids=`ps -Ao pid,cmd | grep "crtc_commit" | awk '{print $1}'`
+    for crtc_pid in ${crtc_pids}
+    do
+        echo ${crtc_pid} > /dev/cpuset/display/tasks
+    done
+
+    # avoid display preemption on big
+    lock_value "0-3" /dev/cpuset/display/cpus
 
     # unify schedtune misc
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
@@ -118,7 +121,7 @@ apply_common()
     # zram doesn't need much read ahead(random read)
     echo "4" > /sys/block/zram0/queue/read_ahead_kb
 
-    # unify scaling_max_freq, libqti-perfd-client.so will override it
+    # unify scaling_max_freq, may be override
     echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
@@ -133,7 +136,7 @@ apply_common()
 
 apply_powersave()
 {
-    # 0.3-1.7, 0.7-1.6, 0.8-2.0, boost: 2.0+2.4, libqti-perfd-client.so will override it
+    # may be override
     echo "300000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
@@ -162,7 +165,7 @@ apply_powersave()
 
 apply_balance()
 {
-    # libqti-perfd-client.so will override it
+    # may be override
     echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
@@ -191,7 +194,7 @@ apply_balance()
 
 apply_performance()
 {
-    # 0.5-1.7, 0.7-2.4, 0.8-2.8, boost: 2.4+2.8, libqti-perfd-client.so will override it
+    # may be override
     echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
@@ -220,7 +223,7 @@ apply_performance()
 
 apply_fast()
 {
-    # 1.0-1.7, 1.6-2.0, 1.6-2.6, boost: 2.4+2.8, libqti-perfd-client.so will override it
+    # may be override
     echo "1036800" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "1612800" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
     echo "1612800" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
