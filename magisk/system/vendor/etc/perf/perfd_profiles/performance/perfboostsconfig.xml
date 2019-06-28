@@ -131,23 +131,19 @@
         <!-- SCHEDBOOST resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
-        <!-- CPU4_HISPEED_LOAD resource opcode, value-->
-        <!-- CPUBW_MIN_FREQ resource opcode, value-->
-        <!-- LLCCBW resource opcode, value-->
-        <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
+        <!-- TOP_APP_CPUSET resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
 
         <!-- Type="1", Vertical Scroll boost -->
         <Config
             Id="0x00001080" Type="1" Enable="true" Target="msmnile"
             Resources="0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
-                       0x40800000, 0, 0x40800100, 1000, 0x40800200, 1000,
+                       0x40800000, 1000, 0x40800100, 1000, 0x40800200, 1000,
                        0x40C00000, 0, 
                        0x40C18000, 50, 
-                       0x40C2C000, 2, 
-                       0x40C64000, 90, 
-                       0x41800000, 80, 
-                       0x43000000, 58, 
-                       0x43400000, 13440" />
+                       0x40C2C000, 3, 
+                       0x40C3C000, 240, 
+                       0x40C40000, 48 " />
 
     <!--Prefling Scroll boost-->
         <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
@@ -203,23 +199,19 @@
         <!-- SCHEDBOOST resource opcode, value-->
         <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
-        <!-- CPU4_HISPEED_LOAD resource opcode, value-->
-        <!-- CPUBW_MIN_FREQ resource opcode, value-->
-        <!-- LLCCBW resource opcode, value-->
-        <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
+        <!-- TOP_APP_CPUSET resource opcode, value-->
+        <!-- FOREGROUND_CPUSET resource opcode, value-->
 
         <!-- Type="1", Drag boost -->
         <Config
             Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
             Resources="0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
-                       0x40800000, 0, 0x40800100, 1000, 0x40800200, 1000,
+                       0x40800000, 1000, 0x40800100, 1000, 0x40800200, 1000,
                        0x40C00000, 0, 
                        0x40C18000, 50, 
-                       0x40C2C000, 2, 
-                       0x40C64000, 90, 
-                       0x41800000, 80, 
-                       0x43000000, 58, 
-                       0x43400000, 13440" />
+                       0x40C2C000, 3, 
+                       0x40C3C000, 240, 
+                       0x40C40000, 48 " />
 
     <!--PackageInstall boost-->
         <!-- SCHEDBOOST resource opcode, value-->
