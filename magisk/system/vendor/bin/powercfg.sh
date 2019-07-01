@@ -121,7 +121,7 @@ apply_common()
 
     # turn off hotplug to reduce latency
     lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
-    # limit the usage of big cluster
+    # tend to online more cores to balance parallel tasks
     echo "15" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
     echo "5" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
     echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
@@ -134,10 +134,19 @@ apply_common()
     # zram doesn't need much read ahead(random read)
     echo "4" > /sys/block/zram0/queue/read_ahead_kb
 
+    # unify scaling_min_freq, may be override
+    echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+
     # unify scaling_max_freq, may be override
     echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
     echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2841600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
+
+    # unify group_migrate
+	lock_value "120" /proc/sys/kernel/sched_group_upmigrate
+	lock_value "100" /proc/sys/kernel/sched_group_downmigrate
 
     # adreno default settings
     lock_value "0" /sys/class/kgsl/kgsl-3d0/force_no_nap
@@ -178,11 +187,6 @@ apply_powersave()
 
 apply_balance()
 {
-    # may be override
-    echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
@@ -207,11 +211,6 @@ apply_balance()
 
 apply_performance()
 {
-    # may be override
-    echo "576000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-
     # 1708 * 0.95 / 1785 = 90.9
     # higher sched_downmigrate to use little cluster more
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
