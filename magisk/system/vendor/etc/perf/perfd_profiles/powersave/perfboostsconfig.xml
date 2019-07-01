@@ -20,9 +20,7 @@
         <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ LITTLE Core resource opcode, value-->
         <!-- CPUBOOST_MAX_FREQ PRIME Core resource opcode, value-->
-        <!-- CPUBOOST_MIN_FREQ BIG Core resource opcode, value-->
-        <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value-->
-        <!-- CPUBOOST_MIN_FREQ PRIME Core resource opcode, value-->
+        <!-- TOP_APP_STUNE_BOOST resource opcode, value-->
         <!-- FOREGROUND_CPUSET resource opcode, value-->
         <!-- CLUSTER_1_MIN_CPUS resource opcode, value-->
         <!-- CPUBW_MIN_FREQ resource opcode, value-->
@@ -34,9 +32,9 @@
         <!-- Type="1", main launch boost of 2sec -->
         <Config
             Id="0x00001081" Type="1" Enable="true" Timeout="500" Target="msmnile"
-            Resources="0x40C00000, 1, 
+            Resources="0x40C00000, 0, 
                        0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2600,
-                       0x40800000, 1600, 0x40800100, 1200, 0x40800200, 2000, 
+                       0x40C18000, 75, 
                        0x40C40000, 127, 
                        0x40C2C000, 3, 
                        0x41800000, 0xFF,
