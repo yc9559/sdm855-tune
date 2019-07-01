@@ -54,8 +54,8 @@ apply_common()
     # 580M for empty apps
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # if task_util >= (896 / 1024 * 20ms = 17.5ms)
-    echo "896" > /proc/sys/kernel/sched_min_task_util_for_boost
+    # if task_util >= (48 / 1024 * 20ms = 0.9ms)
+    echo "48" > /proc/sys/kernel/sched_min_task_util_for_boost
     # if task_util >= (640 / 1024 * 20ms = 12.5ms)
     echo "640" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # normal colocation util report
@@ -106,7 +106,7 @@ apply_common()
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "1" /dev/stune/foreground/schedtune.prefer_idle
     lock_value "0" /dev/stune/top-app/schedtune.sched_boost_enabled
-    lock_value "1" /dev/stune/top-app/schedtune.sched_boost_no_override
+    lock_value "0" /dev/stune/top-app/schedtune.sched_boost_no_override
 
     # CFQ io scheduler takes cgroup into consideration
     lock_value "cfq" /sys/block/sda/queue/scheduler
@@ -164,9 +164,9 @@ apply_powersave()
     echo "0" > /dev/stune/top-app/schedtune.boost
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
-    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "0:1036800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
@@ -195,7 +195,7 @@ apply_balance()
 
     lock_value "0:1036800 4:1056000 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
-    lock_value "3" /sys/module/cpu_boost/parameters/sched_boost_on_input
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
     # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
