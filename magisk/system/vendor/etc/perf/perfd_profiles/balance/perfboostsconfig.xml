@@ -136,12 +136,10 @@
         <Config
             Id="0x00001080" Type="1" Enable="true" Target="msmnile"
             Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
-                       0x40800000, 1600, 0x40800100, 0, 0x40800200, 0,
-                       0x40C00000, 0, 
-                       0x40C18000, 0, 
-                       0x40C2C000, 3, 
-                       0x40C3C000, 112, 
-                       0x40C40000, 48 " />
+                       0x40800000, 1200, 0x40800100, 1000, 0x40800200, 1600,
+                       0x40C00000, 2, 
+                       0x40C18000, 30, 
+                       0x40C2C000, 3" />
 
     <!--Prefling Scroll boost-->
         <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
@@ -204,12 +202,10 @@
         <Config
             Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
             Resources="0x40804000, 2000, 0x40804100, 0xFFF, 0x40804200, 2400,
-                       0x40800000, 1600, 0x40800100, 0, 0x40800200, 0,
-                       0x40C00000, 0, 
-                       0x40C18000, 0, 
-                       0x40C2C000, 3, 
-                       0x40C3C000, 112, 
-                       0x40C40000, 48 " />
+                       0x40800000, 1200, 0x40800100, 1000, 0x40800200, 1600,
+                       0x40C00000, 2, 
+                       0x40C18000, 30, 
+                       0x40C2C000, 3" />
 
     <!--PackageInstall boost-->
         <!-- SCHEDBOOST resource opcode, value-->

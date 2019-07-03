@@ -20,6 +20,19 @@ lock_value()
     fi
 }
 
+# $1:task_name $2:cgroup_name $3:"cpuset"/"stune"
+change_task_cgroup()
+{
+    temp_pids=`ps -Ao pid,cmd | grep "${1}" | awk '{print $1}'`
+    for temp_pid in ${temp_pids}
+    do
+        for temp_tid in `ls /proc/${temp_pid}/task/`
+        do
+            echo ${temp_tid} > /dev/${3}/${2}/tasks
+        done
+    done
+}
+
 # stop before updating cfg
 stop_qti_perfd()
 {
@@ -56,45 +69,39 @@ apply_common()
 
     # if task_util >= (48 / 1024 * 20ms = 0.9ms)
     echo "48" > /proc/sys/kernel/sched_min_task_util_for_boost
-    # if task_util >= (640 / 1024 * 20ms = 12.5ms)
-    echo "640" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    # if task_util >= (512 / 1024 * 20ms = 10.0ms)
+    echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # normal colocation util report
     echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
     # prevent big tasks which we aren't interacting with running on big cluster
     echo "0" > /proc/sys/kernel/sched_walt_rotate_big_tasks
-    # placebo tweak
-    echo "0" > /proc/sys/kernel/sched_schedstats
-    echo "1000000" > /proc/sys/kernel/sched_wakeup_granularity_ns
-
-    # treat servicemanager as foreground, fix laggy bilibili feed scrolling
-    servmgr_pid=`ps -Ao pid,cmd | grep " servicemanager" | awk '{print $1}'`
-    echo ${servmgr_pid} > /dev/cpuset/foreground/tasks
 
     # move all top-app to foreground to reduce nr_top_app
     for ttask in `cat /dev/cpuset/top-app/tasks`
     do
         echo ${ttask} > /dev/cpuset/foreground/tasks
+        echo ${ttask} > /dev/stune/foreground/tasks
     done
 
     # prevent foreground using big cluster, may be override
     echo "0-3" > /dev/cpuset/foreground/cpus
 
-    # treat surfaceflinger as display
-    flinger_pid=`ps -Ao pid,cmd | grep "surfaceflinger" | awk '{print $1}'`
-    for flinger_tid in `ls /proc/${flinger_pid}/task/`
-    do
-        echo ${flinger_tid} > /dev/cpuset/display/tasks
-    done
-
-    # treat crtc_commit as display
-    crtc_pids=`ps -Ao pid,cmd | grep "crtc_commit" | awk '{print $1}'`
-    for crtc_pid in ${crtc_pids}
-    do
-        echo ${crtc_pid} > /dev/cpuset/display/tasks
-    done
+    # treat surfaceflinger & crtc_commit as display
+    change_task_cgroup "surfaceflinger" "display" "cpuset"
+    change_task_cgroup "crtc_commit" "display" "cpuset"
 
     # avoid display preemption on big
     lock_value "0-3" /dev/cpuset/display/cpus
+
+    # fix laggy bilibili feed scrolling
+    change_task_cgroup "servicemanager" "top-app" "cpuset"
+    change_task_cgroup "servicemanager" "top-app" "stune"
+    change_task_cgroup "android.phone" "top-app" "cpuset"
+    change_task_cgroup "android.phone" "top-app" "stune"
+
+    # fix laggy home gesture
+    change_task_cgroup "system_server" "top-app" "cpuset"
+    change_task_cgroup "system_server" "top-app" "stune"
 
     # unify schedtune misc
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
