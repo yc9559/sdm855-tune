@@ -5,7 +5,7 @@
 # Version: 20190628
 
 module_dir="/data/adb/modules/sdm855-tune"
-panel_path="/sdcard/powercfg_panel"
+panel_path="/sdcard/powercfg_panel.txt"
 
 # target power mode
 action=$1
