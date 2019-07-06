@@ -85,8 +85,7 @@ apply_common()
     # prevent foreground using big cluster, may be override
     echo "0-3" > /dev/cpuset/foreground/cpus
 
-    # treat surfaceflinger & crtc_commit as display
-    change_task_cgroup "surfaceflinger" "display" "cpuset"
+    # treat crtc_commit as display
     change_task_cgroup "crtc_commit" "display" "cpuset"
 
     # avoid display preemption on big
@@ -101,6 +100,10 @@ apply_common()
     # fix laggy home gesture
     change_task_cgroup "system_server" "top-app" "cpuset"
     change_task_cgroup "system_server" "top-app" "stune"
+
+    # reduce render thread waiting time
+    change_task_cgroup "surfaceflinger" "top-app" "cpuset"
+    change_task_cgroup "surfaceflinger" "top-app" "stune"
 
     # unify schedtune misc
     lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
