@@ -33,6 +33,7 @@ as anyway perflock calls of these resources would fail. -->
         <Config MajorValue="0x3" MinorValue="0xB" Supported="yes" Node="/sys/devices/system/cpu/cpu4/core_ctl/min_cpus" />
         <Config MajorValue="0x3" MinorValue="0xC" Supported="no" /> <!-- sched_static_cpu_pwr_cost -->
         <Config MajorValue="0x3" MinorValue="0xD" Supported="no" /> <!-- sched_restrict_cluster_spill -->
+        <Config MajorValue="0x3" MinorValue="0xD" Supported="yes" Node="/sys/devices/system/cpu/cpu7/core_ctl/min_cpus" />
         <Config MajorValue="0x3" MinorValue="0x13" Supported="no" /> <!-- sched_set_freq_aggr -->
         <Config MajorValue="0x3" MinorValue="0x14" Supported="no" /> <!-- sched_enable_thread_grouping -->
         <Config MajorValue="0x3" MinorValue="0x17" Supported="no" /> <!-- sched_freq_aggr_threshold -->

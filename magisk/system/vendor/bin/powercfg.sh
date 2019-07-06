@@ -67,10 +67,9 @@ apply_common()
     # 580M for empty apps
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
-    # if task_util >= (48 / 1024 * 20ms = 0.9ms)
-    echo "48" > /proc/sys/kernel/sched_min_task_util_for_boost
-    # if task_util >= (512 / 1024 * 20ms = 10.0ms)
-    echo "512" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    # task_util(p) = p->ravg.demand_scaled <= sysctl_sched_min_task_util_for_boost
+    echo "24" > /proc/sys/kernel/sched_min_task_util_for_boost
+    echo "128" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # normal colocation util report
     echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
     # prevent big tasks which we aren't interacting with running on big cluster
