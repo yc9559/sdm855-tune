@@ -246,19 +246,21 @@ apply_fast()
 {
     # may be override
     echo "1036800" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-    echo "1612800" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo "1612800" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "1401600" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "1401600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
-    # same as config_gameBoost
+    # easier to boost
+    echo "16" > /proc/sys/kernel/sched_min_task_util_for_boost
+    echo "16" > /proc/sys/kernel/sched_min_task_util_for_colocation
     echo "40 40" > /proc/sys/kernel/sched_downmigrate
-    echo "60 60" > /proc/sys/kernel/sched_upmigrate
+    echo "40 60" > /proc/sys/kernel/sched_upmigrate
     echo "40 40" > /proc/sys/kernel/sched_downmigrate
 
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
     echo "20" > /dev/stune/top-app/schedtune.boost
     echo "1" > /dev/stune/top-app/schedtune.prefer_idle
 
-    lock_value "0:0 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "0:0 4:1804800 7:1612800" /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "2000" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "1" /sys/module/cpu_boost/parameters/sched_boost_on_input
 
