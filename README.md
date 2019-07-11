@@ -58,7 +58,7 @@
 sdm855-tune https://github.com/yc9559/sdm855-tune/
 Author:   Matt Yang
 Platform: sdm855
-Version:  20190628
+Version:  20190712
 
 [status]
 Power mode:     balance

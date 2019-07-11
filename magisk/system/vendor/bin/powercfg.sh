@@ -2,7 +2,7 @@
 # sdm855-tune https://github.com/yc9559/sdm855-tune/
 # Author: Matt Yang
 # Platform: sdm855
-# Version: 20190628
+# Version: 20190712
 
 module_dir="/data/adb/modules/sdm855-tune"
 panel_path="/sdcard/powercfg_panel.txt"
@@ -353,7 +353,7 @@ echo ""                                                     >  ${panel_path}
 echo "sdm855-tune https://github.com/yc9559/sdm855-tune/"   >> ${panel_path}
 echo "Author:   Matt Yang"                                  >> ${panel_path}
 echo "Platform: sdm855"                                     >> ${panel_path}
-echo "Version:  20190628"                                   >> ${panel_path}
+echo "Version:  20190712"                                   >> ${panel_path}
 echo ""                                                     >> ${panel_path}
 echo "[status]"                                             >> ${panel_path}
 echo "Power mode:     ${action}"                            >> ${panel_path}
