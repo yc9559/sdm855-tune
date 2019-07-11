@@ -68,8 +68,8 @@ apply_common()
     lock_value "18432,23040,27648,51256,122880,150296" /sys/module/lowmemorykiller/parameters/minfree
 
     # task_util(p) = p->ravg.demand_scaled <= sysctl_sched_min_task_util_for_boost
-    echo "32" > /proc/sys/kernel/sched_min_task_util_for_boost
-    echo "64" > /proc/sys/kernel/sched_min_task_util_for_colocation
+    echo "16" > /proc/sys/kernel/sched_min_task_util_for_boost
+    echo "96" > /proc/sys/kernel/sched_min_task_util_for_colocation
     # normal colocation util report
     echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
     # prevent big tasks which we aren't interacting with running on big cluster
@@ -114,7 +114,6 @@ apply_common()
     lock_value "1" /dev/stune/foreground/schedtune.sched_boost_no_override
     lock_value "0" /dev/stune/foreground/schedtune.boost
     lock_value "1" /dev/stune/foreground/schedtune.prefer_idle
-    lock_value "0" /dev/stune/top-app/schedtune.sched_boost_enabled
     lock_value "0" /dev/stune/top-app/schedtune.sched_boost_no_override
 
     # CFQ io scheduler takes cgroup into consideration
@@ -179,6 +178,7 @@ apply_powersave()
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "0" > /dev/stune/top-app/schedtune.sched_boost_enabled
     echo "0" > /dev/stune/top-app/schedtune.boost
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
@@ -203,6 +203,7 @@ apply_balance()
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "0" > /dev/stune/top-app/schedtune.sched_boost_enabled
     echo "0" > /dev/stune/top-app/schedtune.boost
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
@@ -227,6 +228,7 @@ apply_performance()
     echo "90 60" > /proc/sys/kernel/sched_downmigrate
 
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "1" > /dev/stune/top-app/schedtune.sched_boost_enabled
     echo "10" > /dev/stune/top-app/schedtune.boost
     echo "1" > /dev/stune/top-app/schedtune.prefer_idle
 
@@ -257,6 +259,7 @@ apply_fast()
     echo "40 40" > /proc/sys/kernel/sched_downmigrate
 
     # do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "1" > /dev/stune/top-app/schedtune.sched_boost_enabled
     echo "20" > /dev/stune/top-app/schedtune.boost
     echo "1" > /dev/stune/top-app/schedtune.prefer_idle
 
